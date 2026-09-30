@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HANZZY EDUCATION — Belajar Coding Terstruktur</title>
+<meta name="description" content="Platform belajar coding: HTML, CSS, JavaScript, C++, Python.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08090d; --bg-2: #0e1018; --bg-3: #151822;
+  --surface: #10131c; --surface-2: #161a26; --surface-3: #1e2330;
+  --border: rgba(255,255,255,0.07); --border-2: rgba(255,255,255,0.12); --border-3: rgba(255,255,255,0.18);
+  --text: #f1f3f7; --text-2: #a8b0bf; --text-3: #6b7480; --text-4: #4a525e;
+  --brand: #7c5cff; --brand-2: #5b7fff; --brand-soft: rgba(124,92,255,0.12);
+  --accent: #4dd0e1; --success: #34d399; --danger: #f87171; --warning: #fbbf24;
+  --radius: 14px; --radius-lg: 20px; --nav-h: 64px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+}
+[data-theme="light"] {
+  --bg: #fafbfd; --bg-2: #ffffff; --bg-3: #f2f4f8;
+  --surface: #ffffff; --surface-2: #f7f8fb; --surface-3: #eef1f6;
+  --border: rgba(15,23,42,0.07); --border-2: rgba(15,23,42,0.12); --border-3: rgba(15,23,42,0.2);
+  --text: #0d1117; --text-2: #4b5768; --text-3: #778196; --text-4: #9ca6b8;
+  --brand-soft: rgba(124,92,255,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; width:100%; overflow-x:hidden; }
+body {
+  font-family: var(--font); background: var(--bg); color: var(--text);
+  min-height: 100vh; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; width: 100%; max-width: 100vw;
+}
+a { color:inherit; text-decoration:none; }
+button { font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+img, svg { display:block; max-width:100%; }
+::selection { background: rgba(124,92,255,0.35); }
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--brand), var(--accent)); border-radius:10px; }
+
+/* ========== NAVBAR ========== */
+.nav {
+  position: sticky; top:0; z-index:100; height: var(--nav-h);
+  background: rgba(8,9,13,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="light"] .nav { background: rgba(250,251,253,0.85); }
+.nav-inner {
+  max-width: 1280px; margin: 0 auto; height: 100%;
+  padding: 0 20px; display: flex; align-items: center; gap: 14px;
+}
+.brand { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+  display: grid; place-items: center;
+  box-shadow: 0 4px 16px -4px var(--brand); flex-shrink:0;
+}
+.brand-mark svg { width: 18px; height: 18px; color: #fff; }
+.brand-name { font-size: 0.94rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.brand-name span { display: block; font-size: 0.6rem; font-weight: 600; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+.nav-menu { display:flex; gap:2px; margin-left: 8px; flex:1; overflow-x: auto; scrollbar-width: none; }
+.nav-menu::-webkit-scrollbar { display: none; }
+.nav-link {
+  padding: 8px 12px; border-radius: 8px;
+  font-size: 0.82rem; font-weight: 500;
+  color: var(--text-2); transition: all .15s ease;
+  position: relative; white-space: nowrap;
+}
+.nav-link:hover { color: var(--text); background: var(--surface-2); }
+.nav-link.active { color: var(--text); font-weight: 600; }
+.nav-link.active::after {
+  content:''; position:absolute; left:12px; right:12px; bottom:2px;
+  height: 2px; border-radius:2px;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+}
+.nav-actions { display:flex; align-items:center; gap: 6px; margin-left:auto; flex-shrink:0; }
+.search-box { position: relative; width: 180px; transition: width .2s; }
+.search-box:focus-within { width: 240px; }
+.search-box input {
+  width:100%; padding: 8px 12px 8px 32px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 9px; color: var(--text); font-size: 0.82rem;
+  font-family: inherit; outline: none; transition: all .15s;
+}
+.search-box input:focus { border-color: var(--brand); background: var(--bg-2); box-shadow: 0 0 0 3px rgba(124,92,255,0.12); }
+.search-box svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-3); pointer-events: none; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: grid; place-items: center;
+  background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--text-2); transition: all .15s; flex-shrink: 0;
+}
+.icon-btn:hover { color: var(--text); background: var(--surface-3); border-color: var(--border-2); }
+.icon-btn svg { width: 17px; height: 17px; }
+.nav-burger { display: none; }
+
+.search-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: var(--bg-2); border: 1px solid var(--border-2);
+  border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+  max-height: 360px; overflow-y: auto; display: none; z-index: 200;
+  min-width: 240px;
+}
+.search-dropdown.show { display: block; }
+.search-item { padding: 11px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .12s; font-size: 0.85rem; }
+.search-item:last-child { border-bottom: none; }
+.search-item:hover { background: var(--surface-2); }
+.search-item b { font-weight: 600; }
+.search-item small { display: block; color: var(--text-3); font-size: 0.72rem; margin-top: 2px; }
+
+/* ========== LAYOUT ========== */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px; width: 100%; }
+.main { min-height: calc(100vh - var(--nav-h)); width: 100%; overflow-x: hidden; }
+
+/* ========== HERO ========== */
+.hero {
+  padding: 64px 0 80px;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -200px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(124,92,255,0.14), transparent 70%);
+  pointer-events: none;
+}
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: center; position: relative; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 12px; border-radius: 999px;
+  background: var(--brand-soft); border: 1px solid rgba(124,92,255,0.25);
+  font-size: 0.72rem; font-weight: 600; color: var(--brand);
+  margin-bottom: 20px;
+}
+.hero-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+.hero h1 {
+  font-size: clamp(1.8rem, 4.4vw, 3.2rem);
+  font-weight: 800; letter-spacing: -0.035em; line-height: 1.08;
+  margin-bottom: 18px; word-break: break-word;
+}
+.hero h1 .grad {
+  background: linear-gradient(110deg, var(--brand), var(--accent) 60%, #f472b6);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p.lead {
+  font-size: 0.98rem; color: var(--text-2); max-width: 520px;
+  margin-bottom: 28px; line-height: 1.65; word-break: break-word;
+}
+.hero-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: 10px;
+  font-size: 0.86rem; font-weight: 600; font-family: inherit;
+  transition: all .18s cubic-bezier(.2,.8,.2,1);
+  border: 1px solid transparent; white-space: nowrap;
+  text-align: center; justify-content: center;
+}
+.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #fff; box-shadow: 0 6px 20px -6px var(--brand);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 28px -8px var(--brand); }
+.btn-ghost { background: var(--surface-2); border-color: var(--border-2); color: var(--text); }
+.btn-ghost:hover { background: var(--surface-3); border-color: var(--border-3); }
+.btn-sm { padding: 8px 14px; font-size: 0.78rem; border-radius: 8px; }
+.btn-lg { padding: 13px 24px; font-size: 0.9rem; border-radius: 11px; }
+.btn-danger { background: rgba(248,113,113,0.1); color: var(--danger); border-color: rgba(248,113,113,0.25); }
+.btn-danger:hover { background: rgba(248,113,113,0.18); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+.btn-block { width: 100%; justify-content: center; }
+
+.hero-stats { display: flex; gap: 32px; padding-top: 24px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.hero-stat b { display: block; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.025em; }
+.hero-stat span { font-size: 0.7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; display: block; }
+
+.hero-visual { position: relative; min-width: 0; }
+.hero-code {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 30px 70px -30px rgba(0,0,0,0.7);
+  position: relative;
+}
+.code-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 14px; background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  position: relative; flex-wrap: wrap;
+}
+.code-dots { display: flex; gap: 5px; }
+.code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.code-dots span:nth-child(1) { background: #ff5f57; }
+.code-dots span:nth-child(2) { background: #febc2e; }
+.code-dots span:nth-child(3) { background: #28c840; }
+.code-title { font-family: var(--mono); font-size: 0.72rem; color: var(--text-3); margin-left: 4px; }
+.code-lang { margin-left: auto; font-family: var(--mono); font-size: 0.68rem; padding: 2px 8px; border-radius: 5px; background: var(--brand-soft); color: var(--brand); border: 1px solid rgba(124,92,255,0.2); }
+.code-body {
+  padding: 18px 20px; font-family: var(--mono); font-size: 0.78rem;
+  line-height: 1.7; color: #abb2bf;
+  overflow-x: auto; max-width: 100%; min-width: 0;
+}
+.code-body > div { display: flex; min-width: max-content; }
+.code-body .ln { color: var(--text-4); display: inline-block; width: 22px; user-select: none; margin-right: 12px; flex-shrink: 0; text-align: right; }
+.kw { color: #c678dd; } .st { color: #98c379; } .cm { color: #5c6370; font-style: italic; }
+.nm { color: #d19a66; } .fn { color: #61afef; }
+
+/* ========== SECTION ========== */
+.section { padding: 64px 0; }
+.section-head { margin-bottom: 32px; max-width: 640px; }
+.section-eyebrow {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--brand); margin-bottom: 8px;
+}
+.section-head h2 {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-weight: 800; letter-spacing: -0.025em; margin-bottom: 10px;
+  word-break: break-word;
+}
+.section-head p { color: var(--text-2); font-size: 0.92rem; word-break: break-word; }
+
+/* ========== GALLERY ========== */
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 1024px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+.gallery-item {
+  border-radius: var(--radius); overflow: hidden; position: relative;
+  aspect-ratio: 4/3; background: var(--surface); border: 1px solid var(--border);
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+}
+.gallery-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 45px -20px rgba(124,92,255,0.4);
+  border-color: var(--border-3);
+}
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+.gallery-item:hover img { transform: scale(1.08); }
+.gallery-item .overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.75));
+  display: flex; align-items: flex-end; padding: 14px;
+  opacity: 0; transition: opacity .3s;
+}
+.gallery-item:hover .overlay { opacity: 1; }
+.gallery-item .overlay span { color: #fff; font-size: 0.82rem; font-weight: 600; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+
+/* ========== COURSE GRID ========== */
+.courses-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 1024px) { .courses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .courses-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.course-card {
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  transition: all .22s cubic-bezier(.2,.8,.2,1); cursor: pointer;
+  min-width: 0;
+}
+.course-card:hover {
+  transform: translateY(-3px); border-color: var(--border-2);
+  box-shadow: 0 20px 45px -22px rgba(0,0,0,0.7);
+}
+.course-banner {
+  height: 100px; position: relative;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  flex-shrink: 0;
+}
+.course-banner svg { width: 100%; height: 100%; }
+.course-body { padding: 18px; flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.course-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; min-width: 0; }
+.course-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: grid; place-items: center;
+  font-weight: 800; font-size: 0.78rem; color: #fff; flex-shrink: 0;
+}
+.course-icon svg { width: 20px; height: 20px; }
+.course-icon.html { background: linear-gradient(135deg, #e34f26, #f06529); }
+.course-icon.css { background: linear-gradient(135deg, #264de4, #2965f1); }
+.course-icon.js { background: linear-gradient(135deg, #f7df1e, #e8c500); color: #1a1a1a; }
+.course-icon.cpp { background: linear-gradient(135deg, #00599c, #0086d1); }
+.course-icon.py { background: linear-gradient(135deg, #306998, #ffd43b); color: #1a1a1a; }
+.course-title { min-width: 0; flex: 1; }
+.course-title h3 { font-size: 0.98rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; word-break: break-word; }
+.course-title p { font-size: 0.73rem; color: var(--text-3); margin-top: 2px; }
+.course-desc { font-size: 0.82rem; color: var(--text-2); margin-bottom: 14px; flex: 1; line-height: 1.55; word-break: break-word; }
+.course-meta { display: flex; gap: 14px; font-size: 0.7rem; color: var(--text-3); margin-bottom: 14px; flex-wrap: wrap; }
+.course-meta span { display: flex; align-items: center; gap: 5px; }
+.course-meta svg { width: 13px; height: 13px; }
+.course-progress { height: 4px; background: var(--surface-3); border-radius: 2px; overflow: hidden; margin-bottom: 14px; }
+.course-progress .bar { height: 100%; border-radius: 2px; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+.course-footer { display: flex; gap: 8px; align-items: center; }
+.course-footer .pct { font-family: var(--mono); font-size: 0.73rem; color: var(--text-3); font-weight: 600; }
+
+/* ========== FEATURES ========== */
+.features-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .features-grid { grid-template-columns: minmax(0, 1fr); } }
+.feature {
+  padding: 22px 20px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: all .2s; min-width: 0;
+}
+.feature:hover { background: var(--surface-2); border-color: var(--border-2); }
+.feature-icon {
+  width: 42px; height: 42px; border-radius: 11px;
+  display: grid; place-items: center;
+  background: var(--brand-soft); border: 1px solid rgba(124,92,255,0.2);
+  color: var(--brand); margin-bottom: 14px;
+}
+.feature-icon svg { width: 20px; height: 20px; }
+.feature h3 { font-size: 0.94rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; word-break: break-word; }
+.feature p { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; word-break: break-word; }
+
+/* ========== LEARNING PATH ========== */
+.path-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1024px) { .path-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.path-step {
+  padding: 18px 14px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  position: relative; min-width: 0;
+}
+.path-step .num { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--brand); margin-bottom: 10px; display: block; }
+.path-step h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; letter-spacing: -0.01em; word-break: break-word; }
+.path-step p { font-size: 0.74rem; color: var(--text-3); line-height: 1.5; word-break: break-word; }
+
+/* ========== MATERI ========== */
+.materi-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 28px;
+  padding: 32px 0 60px;
+  width: 100%;
+  max-width: 100%;
+}
+.sidebar {
+  position: sticky; top: calc(var(--nav-h) + 20px); align-self: start;
+  max-height: calc(100vh - var(--nav-h) - 40px); overflow-y: auto;
+  min-width: 0;
+}
+.sidebar-head { padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.sidebar-head h3 { font-size: 0.92rem; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.01em; word-break: break-word; }
+.sidebar-head h3 svg { width: 18px; height: 18px; flex-shrink: 0; }
+.sidebar-head p { font-size: 0.72rem; color: var(--text-3); margin-top: 4px; word-break: break-word; }
+.lesson-list { display: flex; flex-direction: column; gap: 2px; }
+.lesson-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 11px; border-radius: 8px;
+  font-size: 0.81rem; color: var(--text-2);
+  transition: all .15s; cursor: pointer;
+  border: 1px solid transparent; min-width: 0;
+}
+.lesson-item > span:last-child {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  min-width: 0; flex: 1;
+}
+.lesson-item:hover { background: var(--surface-2); color: var(--text); }
+.lesson-item.active { background: var(--surface-2); color: var(--text); border-color: var(--border-2); font-weight: 600; }
+.lesson-item .n {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--surface-3); border: 1px solid var(--border);
+  display: grid; place-items: center; font-size: 0.65rem; font-weight: 700;
+  color: var(--text-3); flex-shrink: 0;
+}
+.lesson-item.active .n { background: var(--brand); color: #fff; border-color: transparent; }
+.lesson-item.done .n { background: var(--success); color: #062d1f; border-color: transparent; }
+.lesson-item.done .n span { display: none; }
+.lesson-item.done .n::after { content: '✓'; font-size: 0.68rem; }
+
+/* ========== CONTENT (materi isi) ========== */
+.content {
+  padding: 28px 32px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-height: 500px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+.content-hero {
+  border-radius: 12px; overflow: hidden; margin-bottom: 22px;
+  border: 1px solid var(--border-2);
+  height: 160px; position: relative;
+  width: 100%; max-width: 100%;
+}
+.content-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.content-hero svg { width: 100%; height: 100%; display: block; }
+.ebook-ref {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 7px;
+  background: var(--brand-soft); border: 1px solid rgba(124,92,255,0.22);
+  color: var(--brand); font-size: 0.7rem; font-weight: 600;
+  margin-bottom: 14px; word-break: break-word;
+}
+.ebook-ref svg { width: 13px; height: 13px; flex-shrink: 0; }
+.content h2 {
+  font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap; word-break: break-word;
+}
+.content h2 svg { width: 24px; height: 24px; color: var(--brand); flex-shrink: 0; }
+.content h3 { font-size: 0.98rem; font-weight: 700; margin: 20px 0 8px; letter-spacing: -0.01em; word-break: break-word; }
+.content p { font-size: 0.88rem; color: var(--text-2); margin-bottom: 12px; line-height: 1.7; word-break: break-word; overflow-wrap: anywhere; }
+.content ul, .content ol { margin: 0 0 14px 20px; color: var(--text-2); font-size: 0.86rem; line-height: 1.7; word-break: break-word; }
+.content li { margin-bottom: 5px; overflow-wrap: anywhere; }
+.content code:not(.cb-body code) {
+  font-family: var(--mono); font-size: 0.82em;
+  padding: 2px 6px; border-radius: 5px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--accent); word-break: break-all; overflow-wrap: anywhere;
+}
+.callout {
+  padding: 12px 15px; border-radius: 10px;
+  background: var(--surface-2); border-left: 3px solid var(--brand);
+  margin: 14px 0; font-size: 0.84rem; color: var(--text-2);
+  line-height: 1.6; word-break: break-word;
+}
+.callout.tip { border-color: var(--success); }
+.callout.warn { border-color: var(--warning); }
+.callout strong { color: var(--text); }
+.content-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);
+  gap: 10px; flex-wrap: wrap;
+}
+
+/* ========== CODE BLOCK — FIX KEPOTONG ========== */
+.cb {
+  border-radius: 11px;
+  border: 1px solid var(--border-2);
+  background: #0a0c12;
+  margin: 14px 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.cb-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 13px; background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.cb-dots { display: flex; gap: 5px; flex-shrink: 0; }
+.cb-dots span { width: 9px; height: 9px; border-radius: 50%; }
+.cb-dots span:nth-child(1) { background: #ff5f57; }
+.cb-dots span:nth-child(2) { background: #febc2e; }
+.cb-dots span:nth-child(3) { background: #28c840; }
+.cb-lang {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 5px; margin-left: 6px;
+  background: var(--brand-soft); color: var(--brand);
+  border: 1px solid rgba(124,92,255,0.2);
+}
+.cb-copy {
+  margin-left: auto; padding: 4px 10px; border-radius: 6px;
+  font-size: 0.7rem; font-weight: 500; font-family: inherit;
+  color: var(--text-3); background: var(--surface-2);
+  border: 1px solid var(--border); transition: all .15s;
+}
+.cb-copy:hover { color: var(--text); background: var(--surface-3); }
+.cb-copy.done { color: var(--success); border-color: rgba(52,211,153,0.3); }
+.cb-body {
+  padding: 12px 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  line-height: 1.65;
+  color: #abb2bf;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.cb-body::-webkit-scrollbar { height: 6px; }
+.cb-body::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+.cb-body::-webkit-scrollbar-thumb { background: rgba(124,92,255,0.4); border-radius: 3px; }
+.cb-body > div {
+  display: flex;
+  min-width: max-content;
+  width: 100%;
+}
+.cb-body .ln {
+  color: var(--text-4);
+  user-select: none;
+  display: inline-block;
+  width: 26px;
+  text-align: right;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.cb-body .code {
+  white-space: pre;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ========== EBOOK ========== */
+.ebook-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1024px) { .ebook-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .ebook-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+.ebook-card {
+  border-radius: var(--radius); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  transition: all .22s; display: flex; flex-direction: column; min-width: 0;
+}
+.ebook-card:hover { transform: translateY(-3px); border-color: var(--border-2); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6); }
+.ebook-cover { aspect-ratio: 3/4; position: relative; overflow: hidden; }
+.ebook-cover svg { width: 100%; height: 100%; }
+.ebook-info { padding: 12px 14px; }
+.ebook-info h4 { font-size: 0.86rem; font-weight: 700; margin-bottom: 3px; word-break: break-word; }
+.ebook-info p { font-size: 0.7rem; color: var(--text-3); margin-bottom: 10px; line-height: 1.4; min-height: 30px; word-break: break-word; }
+
+.reader-modal { position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; padding: 16px; }
+.reader-modal.show { display: flex; }
+.reader-panel {
+  width: 100%; max-width: 1100px; height: 92vh;
+  background: var(--bg-2); border-radius: var(--radius-lg);
+  border: 1px solid var(--border-2); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.reader-bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); flex-wrap: wrap; }
+.reader-bar h3 { font-size: 0.9rem; font-weight: 700; flex: 1; min-width: 0; word-break: break-word; }
+.reader-body { flex: 1; background: #1a1a1a; }
+.reader-body iframe, .reader-body object { width: 100%; height: 100%; border: 0; }
+.reader-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-2); text-align: center; padding: 40px; gap: 12px; }
+
+/* ========== QUIZ ========== */
+.quiz-wrap { max-width: 720px; margin: 32px auto; padding: 0 20px; width: 100%; }
+.quiz-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; gap: 14px; flex-wrap: wrap; }
+.quiz-step { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brand); }
+.quiz-title { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 5px; word-break: break-word; }
+.quiz-badge {
+  font-family: var(--mono); font-size: 0.74rem; padding: 7px 12px;
+  border-radius: 9px; background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--text-2); font-weight: 600;
+}
+.quiz-badge.danger { color: var(--danger); border-color: rgba(248,113,113,0.3); animation: pulse 1s infinite; }
+.quiz-bar { height: 5px; background: var(--surface-3); border-radius: 3px; overflow: hidden; margin-bottom: 22px; }
+.quiz-bar .fill { height: 100%; background: linear-gradient(90deg, var(--brand), var(--accent)); transition: width .35s; }
+.quiz-card { padding: 24px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); }
+.quiz-question { font-size: 0.96rem; font-weight: 600; margin-bottom: 18px; line-height: 1.55; word-break: break-word; }
+.quiz-question small { display: block; font-size: 0.7rem; font-weight: 500; color: var(--text-3); margin-top: 6px; }
+.quiz-options { display: flex; flex-direction: column; gap: 9px; }
+.opt {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 15px; border-radius: 10px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  font-size: 0.86rem; text-align: left; transition: all .15s;
+  cursor: pointer; width: 100%; font-family: inherit; min-width: 0;
+  word-break: break-word;
+}
+.opt > span:last-child { flex: 1; min-width: 0; }
+.opt:hover:not(:disabled) { border-color: var(--border-2); background: var(--surface-3); }
+.opt .k {
+  width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+  background: var(--bg-3); border: 1px solid var(--border-2);
+  display: grid; place-items: center;
+  font-size: 0.72rem; font-weight: 700; color: var(--text-2);
+}
+.opt.selected { border-color: var(--brand); background: var(--brand-soft); }
+.opt.selected .k { background: var(--brand); color: #fff; border-color: transparent; }
+.opt.correct { border-color: var(--success); background: rgba(52,211,153,0.08); }
+.opt.correct .k { background: var(--success); color: #062d1f; border-color: transparent; }
+.opt.wrong { border-color: var(--danger); background: rgba(248,113,113,0.08); }
+.opt.wrong .k { background: var(--danger); color: #fff; border-color: transparent; }
+.opt:disabled { cursor: default; }
+.explanation {
+  margin-top: 14px; padding: 12px 15px; border-radius: 10px;
+  background: rgba(52,211,153,0.06); border-left: 3px solid var(--success);
+  font-size: 0.84rem; color: var(--text-2); line-height: 1.65; display: none;
+  word-break: break-word;
+}
+.explanation.show { display: block; }
+.explanation strong { color: var(--text); }
+.quiz-foot { display: flex; justify-content: space-between; margin-top: 20px; gap: 10px; flex-wrap: wrap; }
+
+/* ========== RESULT ========== */
+.result-card { max-width: 620px; margin: 32px auto; padding: 36px 28px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); text-align: center; width: 100%; }
+.result-status { display: inline-block; padding: 6px 16px; border-radius: 999px; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 18px; }
+.result-status.pass { background: rgba(52,211,153,0.12); color: var(--success); border: 1px solid rgba(52,211,153,0.28); }
+.result-status.fail { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.28); }
+.result-score { font-size: 4rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; }
+.result-score.pass { color: var(--success); }
+.result-score.fail { color: var(--danger); }
+.result-sub { font-size: 0.96rem; color: var(--text-3); margin-top: 4px; word-break: break-word; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
+.result-stat { padding: 14px; border-radius: 11px; background: var(--surface-2); border: 1px solid var(--border); }
+.result-stat b { display: block; font-size: 1.3rem; font-weight: 800; }
+.result-stat span { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
+.result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+.review-list { text-align: left; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--border); }
+.review-list h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 12px; }
+.review-item { padding: 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); margin-bottom: 8px; font-size: 0.82rem; word-break: break-word; }
+.review-item .rq { font-weight: 600; margin-bottom: 6px; line-height: 1.5; }
+.review-item .rq small { color: var(--text-3); font-weight: 500; }
+.review-item .ra { color: var(--text-2); font-size: 0.8rem; line-height: 1.65; word-break: break-word; }
+.review-item .ra b.ok { color: var(--success); }
+.review-item .ra b.no { color: var(--danger); }
+
+/* ========== EXAM ========== */
+.exam-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1024px) { .exam-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .exam-grid { grid-template-columns: minmax(0, 1fr); } }
+.exam-card {
+  padding: 20px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: all .22s; display: flex; flex-direction: column; min-width: 0;
+}
+.exam-card:hover { transform: translateY(-2px); border-color: var(--border-2); }
+.exam-status { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; width: fit-content; }
+.exam-status.available { background: rgba(52,211,153,0.12); color: var(--success); }
+.exam-status.upcoming { background: rgba(251,191,36,0.12); color: var(--warning); }
+.exam-status.completed { background: var(--brand-soft); color: var(--brand); }
+.exam-status.locked { background: rgba(251,191,36,0.12); color: var(--warning); }
+.exam-card h4 { font-size: 0.96rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; word-break: break-word; }
+.exam-card p { font-size: 0.78rem; color: var(--text-2); flex: 1; margin-bottom: 14px; line-height: 1.55; word-break: break-word; }
+.exam-meta { display: flex; gap: 14px; font-size: 0.7rem; color: var(--text-3); margin-bottom: 14px; flex-wrap: wrap; }
+
+/* ========== PLAYGROUND ========== */
+.pg-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .pg-grid { grid-template-columns: minmax(0, 1fr); } }
+.pg-panel { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-2); background: var(--bg-2); display: flex; flex-direction: column; min-width: 0; }
+.pg-tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; }
+.pg-tab { padding: 10px 16px; font-size: 0.78rem; font-weight: 600; color: var(--text-3); border-bottom: 2px solid transparent; transition: all .15s; font-family: inherit; white-space: nowrap; }
+.pg-tab:hover { color: var(--text-2); }
+.pg-tab.active { color: var(--text); border-bottom-color: var(--brand); }
+.pg-editor { width: 100%; flex: 1; min-height: 340px; background: transparent; border: 0; outline: none; resize: vertical; padding: 14px 16px; color: var(--text); font-family: var(--mono); font-size: 0.78rem; line-height: 1.65; }
+.pg-toolbar { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); background: var(--surface); flex-wrap: wrap; }
+.pg-preview { flex: 1; background: #fff; min-height: 340px; }
+.pg-preview iframe { width: 100%; height: 100%; border: 0; }
+.pg-note { grid-column: 1 / -1; padding: 14px 16px; border-radius: var(--radius); background: var(--surface); border: 1px dashed var(--border-2); font-size: 0.82rem; color: var(--text-2); line-height: 1.6; word-break: break-word; }
+
+/* ========== PROGRESS ========== */
+.stats-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-bottom: 30px; }
+@media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat-box { padding: 20px 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); text-align: center; min-width: 0; }
+.stat-box b { display: block; font-size: 1.7rem; font-weight: 900; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--brand), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-box span { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-top: 5px; display: block; }
+
+.progress-card { padding: 18px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); margin-bottom: 12px; }
+.progress-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+.progress-card-head h4 { font-size: 0.92rem; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.01em; word-break: break-word; }
+.progress-card-head h4 svg { width: 18px; height: 18px; flex-shrink: 0; }
+.progress-card-head .pct { font-family: var(--mono); font-size: 0.82rem; color: var(--brand); font-weight: 700; }
+.progress-bar { height: 7px; background: var(--surface-3); border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+.progress-bar .fill { height: 100%; border-radius: 4px; transition: width .8s cubic-bezier(.2,.8,.2,1); }
+.progress-meta { display: flex; gap: 16px; font-size: 0.74rem; color: var(--text-3); flex-wrap: wrap; }
+
+.hist-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 12px; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 7px; font-size: 0.81rem; align-items: center; word-break: break-word; }
+.hist-row .name { font-weight: 600; }
+.hist-row .score { font-family: var(--mono); font-weight: 700; color: var(--text); }
+.badge { font-size: 0.66rem; padding: 3px 9px; border-radius: 6px; width: fit-content; font-weight: 700; letter-spacing: 0.04em; }
+.badge.pass { background: rgba(52,211,153,0.12); color: var(--success); }
+.badge.fail { background: rgba(248,113,113,0.12); color: var(--danger); }
+@media (max-width: 640px) {
+  .hist-row { grid-template-columns: 1fr 1fr; }
+  .hist-row .name { grid-column: 1 / -1; }
+}
+
+/* ========== CONTACT ========== */
+.contact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } }
+.contact-card {
+  padding: 24px; border-radius: var(--radius-lg);
+  background: var(--surface); border: 1px solid var(--border);
+  min-width: 0;
+}
+.contact-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; word-break: break-word; }
+.contact-card h3 svg { width: 18px; height: 18px; color: var(--brand); flex-shrink: 0; }
+.contact-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 12px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  margin-bottom: 10px; transition: all .2s; cursor: pointer;
+  min-width: 0;
+}
+.contact-item:hover { border-color: var(--brand); background: var(--brand-soft); transform: translateX(4px); }
+.contact-icon {
+  width: 40px; height: 40px; border-radius: 11px;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  color: #fff; flex-shrink: 0;
+}
+.contact-icon svg { width: 18px; height: 18px; }
+.contact-text { min-width: 0; flex: 1; }
+.contact-text .label { font-size: 0.68rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+.contact-text .value { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-top: 2px; word-break: break-all; overflow-wrap: anywhere; }
+
+.social-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+@media (max-width: 500px) { .social-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.social-tile {
+  padding: 14px 8px; border-radius: 12px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  transition: all .2s; cursor: pointer; min-width: 0;
+}
+.social-tile:hover { border-color: var(--brand); background: var(--brand-soft); transform: translateY(-3px); }
+.social-tile svg { width: 20px; height: 20px; }
+.social-tile span { font-size: 0.7rem; font-weight: 600; color: var(--text-2); }
+
+.map-embed { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); height: 220px; margin-top: 14px; }
+.map-embed iframe { width: 100%; height: 100%; border: 0; filter: grayscale(0.3) invert(0.9) hue-rotate(180deg); }
+[data-theme="light"] .map-embed iframe { filter: none; }
+
+/* ========== LEGAL PAGES ========== */
+.legal-page { max-width: 820px; margin: 0 auto; padding: 32px 0 60px; width: 100%; }
+.legal-page h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; word-break: break-word; }
+.legal-page .legal-meta { color: var(--text-3); font-size: 0.8rem; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+.legal-page h2 { font-size: 1.1rem; font-weight: 700; margin: 24px 0 10px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; word-break: break-word; }
+.legal-page h2 svg { width: 18px; height: 18px; color: var(--brand); flex-shrink: 0; }
+.legal-page p, .legal-page li { color: var(--text-2); font-size: 0.88rem; line-height: 1.75; margin-bottom: 10px; word-break: break-word; overflow-wrap: anywhere; }
+.legal-page ul { margin: 8px 0 14px 22px; }
+.legal-page ul li { margin-bottom: 6px; }
+.legal-page .legal-card { padding: 16px 18px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); margin: 14px 0; word-break: break-word; }
+.legal-page .legal-card strong { color: var(--text); }
+.legal-page a { color: var(--brand); font-weight: 600; word-break: break-word; }
+.legal-page a:hover { text-decoration: underline; }
+.legal-page code { font-family: var(--mono); font-size: 0.85em; padding: 2px 6px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--border); color: var(--accent); word-break: break-all; }
+
+/* ========== ABOUT ========== */
+.about-hero { padding: 48px 0 32px; text-align: center; max-width: 720px; margin: 0 auto; }
+.about-hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 14px; word-break: break-word; }
+.about-hero p { color: var(--text-2); font-size: 0.96rem; line-height: 1.7; word-break: break-word; }
+.about-profile {
+  display: flex; align-items: center; gap: 18px;
+  padding: 22px; border-radius: var(--radius-lg);
+  background: var(--surface); border: 1px solid var(--border);
+  max-width: 560px; margin: 0 auto 32px; min-width: 0;
+}
+.about-profile img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand); flex-shrink: 0; }
+.about-profile .info { flex: 1; min-width: 0; text-align: left; }
+.about-profile h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 4px; word-break: break-word; }
+.about-profile .role { color: var(--accent); font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
+.about-profile .bio { color: var(--text-2); font-size: 0.82rem; line-height: 1.6; word-break: break-word; }
+@media (max-width: 560px) { .about-profile { flex-direction: column; text-align: center; } .about-profile .info { text-align: center; } }
+.about-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+@media (max-width: 900px) { .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .about-grid { grid-template-columns: minmax(0, 1fr); } }
+.about-card { padding: 22px 20px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); min-width: 0; }
+.about-card .feature-icon { margin-bottom: 14px; }
+.about-card h3 { font-size: 0.94rem; font-weight: 700; margin-bottom: 8px; word-break: break-word; }
+.about-card p { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; word-break: break-word; }
+
+/* ========== FOOTER ========== */
+footer { border-top: 1px solid var(--border); margin-top: 60px; padding: 40px 0 30px; color: var(--text-3); font-size: 0.82rem; }
+.footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: minmax(0, 1fr); } }
+.footer-col h5 { font-size: 0.76rem; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+.footer-col a { display: block; font-size: 0.8rem; color: var(--text-3); padding: 5px 0; transition: color .15s; }
+.footer-col a:hover { color: var(--text); }
+.footer-brand p { margin-top: 12px; font-size: 0.82rem; line-height: 1.65; max-width: 320px; word-break: break-word; }
+.footer-bottom { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.76rem; }
+
+/* ========== DRAWER ========== */
+.drawer-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); z-index: 150; display: none; }
+.drawer-bg.show { display: block; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(300px, 82vw); background: var(--bg-2); border-left: 1px solid var(--border-2); z-index: 160; transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.8,.2,1); padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
+.drawer.show { transform: translateX(0); }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.drawer-links { display: flex; flex-direction: column; gap: 2px; }
+.drawer-links a { padding: 12px 14px; border-radius: 9px; font-size: 0.86rem; font-weight: 500; color: var(--text-2); transition: all .15s; }
+.drawer-links a:hover, .drawer-links a.active { background: var(--surface-2); color: var(--text); }
+
+/* ========== TOAST ========== */
+.toast {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--bg-3); border: 1px solid var(--border-2);
+  padding: 11px 20px; border-radius: 11px;
+  font-size: 0.84rem; font-weight: 600;
+  box-shadow: 0 20px 50px -15px rgba(0,0,0,0.6);
+  z-index: 400; transition: transform .28s cubic-bezier(.2,.8,.2,1);
+  display: flex; align-items: center; gap: 10px;
+  max-width: calc(100vw - 32px); word-break: break-word;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast .d { width: 7px; height: 7px; border-radius: 50%; background: var(--success); flex-shrink: 0; }
+
+/* ========== EMPTY ========== */
+.empty { text-align: center; padding: 50px 20px; color: var(--text-3); }
+.empty svg { margin: 0 auto 16px; opacity: .3; }
+.empty h3 { font-size: 0.98rem; color: var(--text-2); margin-bottom: 6px; font-weight: 600; word-break: break-word; }
+.empty p { font-size: 0.82rem; word-break: break-word; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .hero { padding: 48px 0 56px; }
+  .materi-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 24px 0 40px; }
+  .sidebar {
+    position: static; max-height: none; overflow-y: visible;
+    padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .lesson-list { flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 8px; }
+  .lesson-item { flex-shrink: 0; white-space: nowrap; max-width: 220px; }
+}
+@media (max-width: 768px) {
+  .nav-menu { display: none; }
+  .nav-burger { display: grid; }
+  .search-box { width: 130px; }
+  .search-box:focus-within { width: 180px; }
+  .nav-inner, .wrap { padding: 0 14px; }
+  .section { padding: 48px 0; }
+  .content { padding: 18px 14px; border-radius: 12px; }
+  .cb { border-radius: 9px; margin: 12px 0; }
+  .cb-head { padding: 8px 11px; gap: 8px; }
+  .cb-body { font-size: 0.7rem; padding: 10px 12px; line-height: 1.65; }
+  .cb-body .ln { width: 20px; margin-right: 8px; font-size: 0.68rem; }
+  .cb-copy { font-size: 0.64rem; padding: 3px 8px; }
+  .cb-lang { font-size: 0.62rem; padding: 2px 6px; }
+  .content h2 { font-size: 1.1rem; gap: 8px; margin-bottom: 12px; }
+  .content h2 svg { width: 20px; height: 20px; }
+  .content h3 { font-size: 0.9rem; margin: 18px 0 8px; }
+  .content p { font-size: 0.84rem; line-height: 1.65; }
+  .content ul, .content ol { font-size: 0.82rem; margin-left: 16px; }
+  .content code:not(.cb-body code) { font-size: 0.78em; padding: 1px 5px; }
+  .content-hero { height: 130px; margin-bottom: 16px; }
+  .ebook-ref { font-size: 0.66rem; padding: 4px 9px; }
+  .callout { padding: 11px 13px; font-size: 0.8rem; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .result-score { font-size: 3rem; }
+  .quiz-card { padding: 18px; }
+  .hist-row .name { grid-column: 1/-1; }
+  .search-dropdown { min-width: 200px; }
+}
+@media (max-width: 480px) {
+  .nav-inner, .wrap { padding: 0 12px; }
+  .hero h1 { font-size: 1.65rem; letter-spacing: -0.03em; }
+  .brand-name span { display: none; }
+  .brand-name { font-size: 0.84rem; }
+  .hero-stats { gap: 18px; }
+  .hero-stat b { font-size: 1.15rem; }
+  .hero-stat span { font-size: 0.62rem; }
+  .hero-cta .btn { width: 100%; justify-content: center; }
+  .content { padding: 16px 12px; }
+  .cb-body { font-size: 0.66rem; padding: 9px 10px; }
+  .cb-body .ln { width: 18px; margin-right: 6px; font-size: 0.62rem; }
+  .content h2 { font-size: 1rem; }
+  .content h3 { font-size: 0.86rem; }
+  .content p { font-size: 0.82rem; }
+  .content-foot { flex-direction: column; align-items: stretch; }
+  .content-foot .btn { justify-content: center; width: 100%; }
+  .lesson-item { max-width: 170px; font-size: 0.74rem; padding: 8px 9px; }
+  .result-card { padding: 24px 18px; }
+  .result-score { font-size: 2.6rem; }
+  .quiz-wrap { padding: 0 14px; }
+}
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#/" class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 3 12l5 6M16 6l5 6-5 6M14 4l-4 16"/></svg>
+      </div>
+      <div class="brand-name">HANZZY<span>Education</span></div>
+    </a>
+    <div class="nav-menu" id="navMenu">
+      <a href="#/" class="nav-link" data-route="/">Home</a>
+      <a href="#/belajar" class="nav-link" data-route="/belajar">Belajar</a>
+      <a href="#/ebook" class="nav-link" data-route="/ebook">E-Book</a>
+      <a href="#/latihan" class="nav-link" data-route="/latihan">Latihan</a>
+      <a href="#/ujian" class="nav-link" data-route="/ujian">Ujian</a>
+      <a href="#/playground" class="nav-link" data-route="/playground">Playground</a>
+      <a href="#/progress" class="nav-link" data-route="/progress">Progress</a>
+      <a href="#/contact" class="nav-link" data-route="/contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="searchInput" placeholder="Cari materi..." aria-label="Cari">
+        <div class="search-dropdown" id="searchDropdown"></div>
+      </div>
+      <button class="icon-btn" id="themeToggle" aria-label="Ganti tema">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="icon-btn nav-burger" id="burger" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 3 12l5 6M16 6l5 6-5 6M14 4l-4 16"/></svg></div>
+      <div class="brand-name">HANZZY<span>Education</span></div>
+    </div>
+    <button class="icon-btn" id="drawerClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="drawer-links">
+    <a href="#/">Home</a>
+    <a href="#/belajar">Belajar</a>
+    <a href="#/ebook">E-Book</a>
+    <a href="#/latihan">Latihan</a>
+    <a href="#/ujian">Ujian</a>
+    <a href="#/playground">Playground</a>
+    <a href="#/progress">Progress</a>
+    <a href="#/contact">Contact</a>
+    <a href="#/about">About</a>
+    <a href="#/privacy">Privacy Policy</a>
+    <a href="#/terms">Terms of Service</a>
+    <a href="#/faq">FAQ</a>
+  </div>
+</aside>
+
+<main class="main" id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 3 12l5 6M16 6l5 6-5 6M14 4l-4 16"/></svg></div>
+          <div class="brand-name">HANZZY<span>Education</span></div>
+        </div>
+        <p>Platform belajar coding. Materi, latihan, sama ujian udah diselarasin sama 5 e-book dari ThePort & HANZZY DEV.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Courses</h5>
+        <a href="#/materi/html/html-1">HTML</a>
+        <a href="#/materi/css/css-1">CSS</a>
+        <a href="#/materi/js/js-1">JavaScript</a>
+        <a href="#/materi/cpp/cpp-1">C++</a>
+        <a href="#/materi/py/py-1">Python</a>
+      </div>
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="#/latihan">Latihan</a>
+        <a href="#/ujian">Ujian</a>
+        <a href="#/playground">Playground</a>
+        <a href="#/progress">Progress</a>
+        <a href="#/ebook">E-Book</a>
+      </div>
+      <div class="footer-col">
+        <h5>Info</h5>
+        <a href="#/about">About</a>
+        <a href="#/privacy">Privacy Policy</a>
+        <a href="#/terms">Terms of Service</a>
+        <a href="#/faq">FAQ</a>
+        <a href="#/contact">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 HANZZY DEV — All rights reserved.</div>
+      <div>Learn. Practice. Improve.</div>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"><span class="d"></span><span id="toastMsg">Tersimpan</span></div>
+
+<div class="reader-modal" id="readerModal">
+  <div class="reader-panel">
+    <div class="reader-bar">
+      <h3 id="readerTitle">E-Book</h3>
+      <button class="btn btn-ghost btn-sm" id="readerDownload">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download
+      </button>
+      <button class="icon-btn" id="readerClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="reader-body" id="readerBody"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   GALLERY
+   ============================================================ */
+const GALLERY = [
+  { url: 'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=600&fit=crop', title: 'Ngoding Sesi Malam' },
+  { url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop', title: 'Setup Meja Kerja' },
+  { url: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop', title: 'Code di Layar' },
+  { url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop', title: 'Belajar Frontend' },
+  { url: 'https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?w=800&h=600&fit=crop', title: 'Kolaborasi Tim' },
+  { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop', title: 'Workspace Rapi' },
+  { url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=600&fit=crop', title: 'Matrix Vibes' },
+  { url: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&h=600&fit=crop', title: 'Terminal Linux' }
+];
+
+/* ============================================================
+   SVG ICONS
+   ============================================================ */
+const SVG = {
+  htmlVisual: `<svg viewBox="0 0 300 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="hv" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e34f26" stop-opacity="0.28"/><stop offset="100%" stop-color="#f06529" stop-opacity="0.04"/></linearGradient></defs><rect width="300" height="100" fill="url(#hv)"/><text x="150" y="60" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="30" font-weight="900" fill="#e34f26" opacity="0.9">&lt;/&gt;</text></svg>`,
+  cssVisual: `<svg viewBox="0 0 300 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cv" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2965f1" stop-opacity="0.3"/><stop offset="100%" stop-color="#264de4" stop-opacity="0.04"/></linearGradient></defs><rect width="300" height="100" fill="url(#cv)"/><g transform="translate(60,50)"><circle cx="0" cy="0" r="11" fill="#2965f1"/><circle cx="30" cy="0" r="11" fill="#7c5cff"/><circle cx="60" cy="0" r="11" fill="#4dd0e1"/><circle cx="90" cy="0" r="11" fill="#f472b6"/></g></svg>`,
+  jsVisual: `<svg viewBox="0 0 300 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="jv" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f7df1e" stop-opacity="0.28"/><stop offset="100%" stop-color="#e8c500" stop-opacity="0.04"/></linearGradient></defs><rect width="300" height="100" fill="url(#jv)"/><rect x="122" y="25" width="56" height="50" rx="10" fill="#f7df1e"/><text x="150" y="60" text-anchor="middle" font-family="Arial" font-size="24" font-weight="900" fill="#1a1a1a">JS</text></svg>`,
+  cppVisual: `<svg viewBox="0 0 300 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="pv" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00599c" stop-opacity="0.35"/><stop offset="100%" stop-color="#0086d1" stop-opacity="0.05"/></linearGradient></defs><rect width="300" height="100" fill="url(#pv)"/><text x="120" y="66" font-family="Arial" font-size="36" font-weight="900" fill="#4dd0e1">C</text><text x="158" y="60" font-family="Arial" font-size="26" font-weight="900" fill="#0086d1">+</text><text x="176" y="60" font-family="Arial" font-size="26" font-weight="900" fill="#0086d1">+</text></svg>`,
+  pyVisual: `<svg viewBox="0 0 300 100" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="pyv" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#306998" stop-opacity="0.4"/><stop offset="100%" stop-color="#ffd43b" stop-opacity="0.15"/></linearGradient></defs><rect width="300" height="100" fill="url(#pyv)"/><text x="150" y="65" text-anchor="middle" font-family="Arial" font-size="36" font-weight="900" fill="#ffd43b">Py</text></svg>`,
+  htmlIcon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4 8 20M18 8l4 4-4 4M6 8l-4 4 4 4"/></svg>`,
+  cssIcon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18M3 12h18"/></svg>`,
+  jsIcon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9M21 12a9 9 0 0 1-9 9M12 3v18M3 12h18"/></svg>`,
+  cppIcon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 6 8v8l6 4 6-4V8z"/><path d="M9 12h6M12 9v6"/></svg>`,
+  pyIcon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-4 1.5-4 3v3h8v3H6c-2 0-4 1-4 4v3c0 2 1.5 3 4 3h3v-4c0-2 1-3 4-3h5c2 0 4-1 4-4V8c0-3-1.5-4-4-4h-6z"/></svg>`,
+  iconBook: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  iconPencil: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>`,
+  iconClock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
+  iconChart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M7 15l4-4 4 4 5-5"/></svg>`,
+  iconPlay: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+  iconShield: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  iconRef: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  iconArrow: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
+  iconUser: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>`,
+  iconMail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>`,
+  iconPhone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+  iconGlobe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  iconMap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  iconGithub: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>`,
+  iconWA: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>`,
+  iconInstagram: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg>`,
+  iconYoutube: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+  iconLinkedin: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>`,
+  iconLock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  emptyBox: `<svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 7 12 3l9 4v10l-9 4-9-4V7zM3 7l9 4 9-4M12 11v10"/></svg>`
+};
+
+function ebookCover(courseId, name) {
+  const t = {
+    html: { c1:'#e34f26', c2:'#7c2d12', txt:'#fff', letter:'<>' },
+    css:  { c1:'#2965f1', c2:'#1e3a8a', txt:'#fff', letter:'{}' },
+    js:   { c1:'#f7df1e', c2:'#a37c00', txt:'#1a1a1a', letter:'JS' },
+    cpp:  { c1:'#0086d1', c2:'#003366', txt:'#fff', letter:'C++' },
+    py:   { c1:'#ffd43b', c2:'#306998', txt:'#1a1a1a', letter:'PY' }
+  }[courseId];
+  return `<svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">
+    <defs><linearGradient id="ec-${courseId}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${t.c1}"/><stop offset="100%" stop-color="${t.c2}"/></linearGradient></defs>
+    <rect width="300" height="400" fill="url(#ec-${courseId})"/>
+    <text x="150" y="72" text-anchor="middle" font-family="Arial" font-size="11" font-weight="800" letter-spacing="3.5" fill="${t.txt}" opacity="0.85">HANZZY</text>
+    <text x="150" y="88" text-anchor="middle" font-family="Arial" font-size="7" font-weight="600" letter-spacing="5" fill="${t.txt}" opacity="0.6">EDUCATION</text>
+    <text x="150" y="232" text-anchor="middle" font-family="Arial" font-size="82" font-weight="900" fill="${t.txt}" letter-spacing="-4">${t.letter}</text>
+    <rect x="28" y="308" width="244" height="58" rx="9" fill="rgba(0,0,0,0.32)"/>
+    <text x="150" y="330" text-anchor="middle" font-family="Arial" font-size="13" font-weight="800" fill="${t.txt}">${name} E-BOOK</text>
+    <text x="150" y="346" text-anchor="middle" font-family="Arial" font-size="7" font-weight="600" letter-spacing="2" fill="${t.txt}" opacity="0.75">THEPORT &amp; HANZZY DEV</text>
+    <text x="150" y="358" text-anchor="middle" font-family="Arial" font-size="6" font-weight="500" letter-spacing="1.5" fill="${t.txt}" opacity="0.6">EDITION 2026</text>
+  </svg>`;
+}
+
+/* ============================================================
+   COURSES
+   ============================================================ */
+const COURSES = {
+  html: { id:'html', name:'HTML', tagline:'Struktur web', desc:'Dari filosofi web, struktur, semantik, form, sampai aksesibilitas HTML5.', color:'#e34f26', icon:SVG.htmlIcon, visual:SVG.htmlVisual, ebookName:'ThePort — Master HTML' },
+  css:  { id:'css', name:'CSS', tagline:'Tampilan interface', desc:'Selector, box model, flexbox, grid, positioning, responsive, animasi.', color:'#2965f1', icon:SVG.cssIcon, visual:SVG.cssVisual, ebookName:'ThePort — Mastering CSS' },
+  js:   { id:'js', name:'JavaScript', tagline:'Interaktivitas', desc:'Dari variabel, fungsi, DOM, async/await, sampai OOP ES6 modern.', color:'#f7df1e', icon:SVG.jsIcon, visual:SVG.jsVisual, ebookName:'ThePort — JavaScript Masterclass' },
+  cpp:  { id:'cpp', name:'C++', tagline:'Dasar pemrograman', desc:'Tipe data, control flow, pointer, STL, smart pointer, dan OOP.', color:'#0086d1', icon:SVG.cppIcon, visual:SVG.cppVisual, ebookName:'ThePort — Panduan C++' },
+  py:   { id:'py', name:'Python', tagline:'Bahasa pemula', desc:'Sintaks dasar, struktur data, file, exception, module, dan OOP.', color:'#306998', icon:SVG.pyIcon, visual:SVG.pyVisual, ebookName:'HANZZY DEV — Belajar Python' }
+};
+
+function L(courseId, title, ref, body, imgUrl) {
+  const c = COURSES[courseId];
+  const hero = imgUrl
+    ? `<div class="content-hero"><img src="${imgUrl}" alt="${title}" loading="lazy" onerror="this.parentElement.innerHTML='${c.visual.replace(/'/g,'&#39;')}'"></div>`
+    : `<div class="content-hero">${c.visual}</div>`;
+  return `${hero}<div class="ebook-ref">${SVG.iconRef}Referensi: ${ref}</div><h2>${c.icon} ${title}</h2>${body}`;
+}
+function cb(lang, code) {
+  const esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const numbered = esc.split('\n').map((l,i)=>`<div><span class="ln">${i+1}</span><span class="code">${l||' '}</span></div>`).join('');
+  return `<div class="cb"><div class="cb-head"><div class="cb-dots"><span></span><span></span><span></span></div><span class="cb-lang">${lang}</span><button class="cb-copy" onclick="copyCode(this)">Copy</button></div><div class="cb-body">${numbered}</div></div>`;
+}
+
+const LESSON_IMGS = {
+  html: ['https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&h=300&fit=crop'],
+  css: ['https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1550439062-609e1531270e?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1581276879432-15e50529f34b?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=800&h=300&fit=crop'],
+  js: ['https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1618477388954-7852f32655ec?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1632882765546-1ee75f53becb?w=800&h=300&fit=crop'],
+  cpp: ['https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=300&fit=crop'],
+  py: ['https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1607705703571-c5a8695f18f6?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=300&fit=crop','https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=300&fit=crop']
+};
+
+const LESSONS = {
+  html: [
+    { id:'html-1', title:'Sejarah & Filosofi Web', content: L('html','Sejarah & Filosofi Web','Bab 1 ThePort',`
+      <p>HTML diciptakan <strong>Tim Berners-Lee</strong> tahun 1989 di CERN. Bukan bahasa pemrograman, tapi bahasa markup buat struktur dan makna konten.</p>
+      <h3>Evolusi</h3>
+      <ul><li>HTML 1.0–4.01: era "tag soup"</li><li>XHTML: XML ketat</li><li>HTML5: Living Standard (WHATWG & W3C)</li></ul>
+      <h3>Cara Kerja Browser</h3>
+      <p>Browser parse HTML → DOM Tree → digabung CSS jadi Render Tree → digambar ke layar.</p>
+      <div class="callout tip"><strong>Prinsip:</strong> HTML buat struktur, CSS buat tampilan.</div>
+      ${cb('html',`<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <title>Halaman Pertama</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n  <p>Halaman HTML pertama.</p>\n</body>\n</html>`)}`, LESSON_IMGS.html[0]) },
+    { id:'html-2', title:'Anatomi Dokumen & Metadata', content: L('html','Anatomi Dokumen & Metadata','Bab 2 ThePort',`
+      <p>Struktur wajib: <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>.</p>
+      ${cb('html',`<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>Judul Tab</title>\n</head>`)}
+      <div class="callout"><strong>UTF-8 wajib</strong> biar karakter Indonesia tampil bener.</div>`, LESSON_IMGS.html[1]) },
+    { id:'html-3', title:'Semantik Teks & Hirarki', content: L('html','Semantik Teks & Hirarki','Bab 3 ThePort',`
+      <p>Pakai tag sesuai makna, bukan tampilan default.</p>
+      <ul><li><strong>Logical:</strong> <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;code&gt;</code></li><li><strong>Physical (hindari):</strong> <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;u&gt;</code></li></ul>
+      ${cb('html',`<blockquote>Kutipan panjang dari sumber.</blockquote>\n<p>Menurut <cite>Buku X</cite>, ini penting.</p>\n<abbr title="HyperText Markup Language">HTML</abbr>`)}`, LESSON_IMGS.html[2]) },
+    { id:'html-4', title:'List & Struktur Data', content: L('html','List & Struktur Data','Bab 4 ThePort',`
+      ${cb('html',`<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n</ul>\n\n<ol>\n  <li>Buka editor</li>\n  <li>Tulis kode</li>\n</ol>\n\n<dl>\n  <dt>HTML</dt>\n  <dd>Bahasa markup untuk struktur web.</dd>\n</dl>`)}
+      <div class="callout tip"><strong>Nesting list</strong> bikin menu bertingkat yang ramah screen-reader.</div>`, LESSON_IMGS.html[3]) },
+    { id:'html-5', title:'Multimedia & Gambar', content: L('html','Multimedia & Gambar','Bab 5 ThePort',`
+      ${cb('html',`<img src="hero.jpg" alt="Banner utama" loading="lazy">\n\n<figure>\n  <img src="chart.png" alt="Grafik Q1">\n  <figcaption>Penjualan Q1 2026</figcaption>\n</figure>`)}
+      <div class="callout"><strong>Format modern:</strong> WebP/AVIF lebih kecil dari JPEG/PNG.</div>`, LESSON_IMGS.html[4]) },
+    { id:'html-6', title:'Navigasi & Hyperlink', content: L('html','Navigasi & Hyperlink','Bab 6 ThePort',`
+      ${cb('html',`<a href="https://example.com" target="_blank" rel="noopener">Eksternal</a>\n<a href="/about.html">Relatif</a>\n<a href="#section-2">Anchor</a>\n<a href="mailto:hi@hanzzy.dev">Email</a>`)}
+      <div class="callout warn"><strong>Keamanan:</strong> <code>target="_blank"</code> tanpa <code>rel="noopener"</code> bisa jadi celah phishing.</div>`, LESSON_IMGS.html[5]) },
+    { id:'html-7', title:'Tabel Data Kompleks', content: L('html','Tabel Data Kompleks','Bab 7 ThePort',`
+      ${cb('html',`<table>\n  <caption>Nilai Siswa</caption>\n  <thead>\n    <tr><th scope="col">Nama</th><th scope="col">Nilai</th></tr>\n  </thead>\n  <tbody>\n    <tr><th scope="row">Budi</th><td>85</td></tr>\n  </tbody>\n</table>`)}`, LESSON_IMGS.html[6]) },
+    { id:'html-8', title:'Formulir & Validasi', content: L('html','Formulir & Validasi','Bab 8 ThePort',`
+      ${cb('html',`<form action="/submit" method="POST">\n  <label for="nama">Nama:</label>\n  <input type="text" id="nama" required minlength="3">\n  <button type="submit">Kirim</button>\n</form>`)}
+      <div class="callout"><strong>Validasi native:</strong> <code>required</code>, <code>pattern</code>, <code>min</code> — tanpa JS.</div>`, LESSON_IMGS.html[7]) },
+    { id:'html-9', title:'Elemen Semantik HTML5', content: L('html','Elemen Semantik HTML5','Bab 9 ThePort',`
+      ${cb('html',`<header>\n  <nav>Menu</nav>\n</header>\n<main>\n  <article>\n    <h1>Judul Artikel</h1>\n    <section>Bagian 1</section>\n  </article>\n</main>\n<footer>Copyright 2026</footer>`)}`, LESSON_IMGS.html[8]) },
+    { id:'html-10', title:'Best Practices & Aksesibilitas', content: L('html','Best Practices & Aksesibilitas','Bab 10 ThePort',`
+      <ul><li>Selalu isi <code>alt</code> pada gambar</li><li>Pakai <code>aria-label</code> buat tombol ikon</li><li>Kontras minimal 4.5:1 (WCAG AA)</li><li>Fokus keyboard visible</li></ul>
+      <div class="callout"><strong>SEO On-Page:</strong> heading hierarkis, meta description unik per halaman.</div>`, LESSON_IMGS.html[9]) }
+  ],
+  css: [
+    { id:'css-1', title:'Evolusi CSS & Arsitektur', content: L('css','Evolusi CSS & Arsitektur','Bab 1 Mastering CSS',`
+      <p>CSS lahir 1996 buat misahin presentasi dari struktur. Sekarang era CSS modern: Grid, Flexbox, Custom Properties.</p>
+      ${cb('css',`:root {\n  --primary: #4dd0e1;\n  --bg: #0b0f18;\n}\n\n.container {\n  display: flow-root;\n  max-width: 1200px;\n  margin-inline: auto;\n  padding: clamp(1rem, 5%, 3rem);\n}`)}`, LESSON_IMGS.css[0]) },
+    { id:'css-2', title:'Selector Masterclass', content: L('css','Selector Masterclass','Bab 2 Mastering CSS',`
+      ${cb('css',`p { color: gray; }\n.card { padding: 20px; }\n#header { background: black; }\nnav > a { color: white; }\nbutton:hover { background: cyan; }\np::first-line { font-weight: bold; }`)}`, LESSON_IMGS.css[1]) },
+    { id:'css-3', title:'Colors & Background', content: L('css','Colors & Background','Bab 4 Mastering CSS',`
+      ${cb('css',`.box {\n  color: hsl(210, 50%, 20%);\n  background: linear-gradient(135deg, #667eea, #764ba2);\n}\n.overlay {\n  background: rgba(0, 0, 0, 0.7);\n  backdrop-filter: blur(10px);\n}`)}`, LESSON_IMGS.css[2]) },
+    { id:'css-4', title:'Box Model', content: L('css','Box Model','Bab 3 Mastering CSS',`
+      ${cb('css',`.card {\n  box-sizing: border-box;\n  width: 300px;\n  padding: 20px;\n  border: 2px solid #333;\n  margin: 16px auto;\n}`)}
+      <div class="callout warn"><strong>Margin Collapsing:</strong> cegah dengan <code>display: flow-root</code> di parent.</div>`, LESSON_IMGS.css[3]) },
+    { id:'css-5', title:'Typography & Units', content: L('css','Typography & Units','Bab 4 Mastering CSS',`
+      ${cb('css',`h1 {\n  font-size: clamp(1.5rem, 5vw, 3rem);\n  line-height: 1.2;\n  letter-spacing: -0.02em;\n}`)}`, LESSON_IMGS.css[4]) },
+    { id:'css-6', title:'Flexbox', content: L('css','Flexbox','Bab 5 Mastering CSS',`
+      ${cb('css',`.container {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 16px;\n  flex-wrap: wrap;\n}`)}
+      <div class="callout tip"><strong>Centering:</strong> <code>display:flex; justify-content:center; align-items:center</code>.</div>`, LESSON_IMGS.css[5]) },
+    { id:'css-7', title:'CSS Grid', content: L('css','CSS Grid','Bab 6 Mastering CSS',`
+      ${cb('css',`.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n  gap: 20px;\n}`)}`, LESSON_IMGS.css[6]) },
+    { id:'css-8', title:'Positioning & Z-Index', content: L('css','Positioning & Z-Index','Bab 7 Mastering CSS',`
+      ${cb('css',`.relative { position: relative; top: 10px; }\n.absolute { position: absolute; top: 0; right: 0; }\n.fixed    { position: fixed; bottom: 20px; }\n.sticky   { position: sticky; top: 0; }`)}`, LESSON_IMGS.css[7]) },
+    { id:'css-9', title:'Responsive & Media Queries', content: L('css','Responsive & Media Queries','Bab 8 Mastering CSS',`
+      ${cb('css',`.card { width: 100%; padding: 16px; }\n@media (min-width: 768px) {\n  .card { width: 48%; }\n}\n@media (min-width: 1024px) {\n  .card { width: 31%; }\n}`)}`, LESSON_IMGS.css[8]) },
+    { id:'css-10', title:'Animasi & Transitions', content: L('css','Animasi & Transitions','Bab 9 Mastering CSS',`
+      ${cb('css',`@keyframes fadeInUp {\n  from { opacity: 0; transform: translateY(20px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n.animate { animation: fadeInUp 0.5s ease-out; }`)}
+      <div class="callout tip"><strong>GPU:</strong> animasi <code>transform</code> & <code>opacity</code> lebih ringan.</div>`, LESSON_IMGS.css[9]) }
+  ],
+  js: [
+    { id:'js-1', title:'Evolusi & Runtime JavaScript', content: L('js','Evolusi & Runtime JavaScript','Bab 1 JS Masterclass',`
+      <p>JavaScript lahir 1995 sebagai Mocha → LiveScript → JavaScript. Diatur standar ECMAScript.</p>
+      ${cb('javascript',`'use strict';\nconst module = (function() {\n  const priv = 'rahasia';\n  return { pub: () => console.log(priv) };\n})();\nmodule.pub();`)}`, LESSON_IMGS.js[0]) },
+    { id:'js-2', title:'Variabel & Tipe Data', content: L('js','Variabel & Tipe Data','Bab 2 JS Masterclass',`
+      ${cb('javascript',`var x = 1;    // function scope\nlet y = 2;    // block scope\nconst z = 3;  // block, gak bisa re-assign`)}
+      <div class="callout warn"><strong>Strict:</strong> pakai <code>===</code>, hindari <code>==</code>.</div>`, LESSON_IMGS.js[1]) },
+    { id:'js-3', title:'Operator & Control Flow', content: L('js','Operator & Control Flow','Bab 3 JS Masterclass',`
+      ${cb('javascript',`console.log(5 + 3);     // 8\nconsole.log(5 === "5"); // false\nconsole.log(true && false); // false`)}`, LESSON_IMGS.js[2]) },
+    { id:'js-4', title:'Fungsi & Modularitas', content: L('js','Fungsi & Modularitas','Bab 4 JS Masterclass',`
+      ${cb('javascript',`function tambah(a, b) { return a + b; }\nconst kali = (a, b) => a * b;\nfunction jumlah(...angka) {\n  return angka.reduce((a, b) => a + b, 0);\n}`)}`, LESSON_IMGS.js[3]) },
+    { id:'js-5', title:'Array & Object', content: L('js','Array & Object','Bab 5 JS Masterclass',`
+      ${cb('javascript',`const angka = [1, 2, 3, 4, 5];\nconst dobel = angka.map(n => n * 2);\nconst genap = angka.filter(n => n % 2 === 0);\nconst total = angka.reduce((s, n) => s + n, 0);`)}`, LESSON_IMGS.js[4]) },
+    { id:'js-6', title:'Loops & Iterasi', content: L('js','Loops & Iterasi','Bab 6 JS Masterclass',`
+      ${cb('javascript',`for (let i = 0; i < 5; i++) console.log(i);\nfor (const item of [10, 20]) console.log(item);\nfor (const key in {a:1, b:2}) console.log(key);`)}`, LESSON_IMGS.js[5]) },
+    { id:'js-7', title:'DOM Manipulation', content: L('js','DOM Manipulation','Bab 7 JS Masterclass',`
+      ${cb('javascript',`const title = document.querySelector("h1");\ntitle.textContent = "Halo Baru";\ntitle.classList.add("active");\n\nlist.addEventListener("click", (e) => {\n  if (e.target.matches(".item")) handleItem(e.target);\n});`)}
+      <div class="callout warn"><strong>XSS:</strong> jangan pakai <code>innerHTML</code> dengan input user.</div>`, LESSON_IMGS.js[6]) },
+    { id:'js-8', title:'Asynchronous JavaScript', content: L('js','Asynchronous JavaScript','Bab 8 JS Masterclass',`
+      ${cb('javascript',`async function getData() {\n  try {\n    const res = await fetch("/api/data");\n    const data = await res.json();\n    return data;\n  } catch (err) {\n    console.error(err);\n  }\n}`)}`, LESSON_IMGS.js[7]) },
+    { id:'js-9', title:'OOP & ES6 Classes', content: L('js','OOP & ES6 Classes','Bab 9 JS Masterclass',`
+      ${cb('javascript',`class Mahasiswa {\n  #nim;\n  constructor(nama, nim) {\n    this.nama = nama;\n    this.#nim = nim;\n  }\n  perkenalan() { return "Saya " + this.nama; }\n}`)}`, LESSON_IMGS.js[8]) },
+    { id:'js-10', title:'Modern Tools & Modules', content: L('js','Modern Tools & Modules','Bab 10 JS Masterclass',`
+      ${cb('javascript',`// utils.js\nexport function tambah(a, b) { return a + b; }\n\n// main.js\nimport { tambah } from './utils.js';`)}
+      <p>Setelah JS solid → React, Vue, atau Svelte.</p>`, LESSON_IMGS.js[9]) }
+  ],
+  cpp: [
+    { id:'cpp-1', title:'Mengenal C++ & Cara Kerja', content: L('cpp','Mengenal C++ & Cara Kerja','Bab 1 ThePort C++',`
+      <p>C++ bahasa <strong>compiled</strong> berperforma tinggi.</p>
+      ${cb('cpp',`#include <iostream>\n\nint main() {\n  std::cout << "Halo, C++!\\n";\n  return 0;\n}\n\n// g++ -std=c++17 halo.cpp -o halo`)}`, LESSON_IMGS.cpp[0]) },
+    { id:'cpp-2', title:'Struktur Program & Komentar', content: L('cpp','Struktur Program & Komentar','Bab 2 ThePort C++',`
+      ${cb('cpp',`#include <iostream>\n\n// Fungsi utama\nint main() {\n  /* Komentar multi-baris */\n  std::cout << "Halo\\n";\n  return 0;\n}`)}`, LESSON_IMGS.cpp[1]) },
+    { id:'cpp-3', title:'Variabel & Tipe Data', content: L('cpp','Variabel & Tipe Data','Bab 3 ThePort C++',`
+      ${cb('cpp',`const std::string nama("Rani");\nint umur{19};\ndouble tinggi{1.62};\nbool aktif{true};`)}`, LESSON_IMGS.cpp[2]) },
+    { id:'cpp-4', title:'Input & Output', content: L('cpp','Input & Output','Bab 4 ThePort C++',`
+      ${cb('cpp',`std::string nama;\nint umur{};\nstd::cout << "Nama: ";\nstd::getline(std::cin, nama);\nstd::cin >> umur;`)}`, LESSON_IMGS.cpp[3]) },
+    { id:'cpp-5', title:'Operator Aritmetika & Logika', content: L('cpp','Operator Aritmetika & Logika','Bab 5-7 ThePort C++',`
+      ${cb('cpp',`int a{17}, b{5};\nstd::cout << a + b;  // 22\nstd::cout << a / b;  // 3\nstd::cout << a % b;  // 2\ndouble r = static_cast<double>(a) / b;`)}`, LESSON_IMGS.cpp[4]) },
+    { id:'cpp-6', title:'Percabangan & Loop', content: L('cpp','Percabangan & Loop','Bab 8-10 ThePort C++',`
+      ${cb('cpp',`if (nilai >= 85) std::cout << "A\\n";\nelse std::cout << "B\\n";\n\nfor (int i{0}; i < 4; ++i) std::cout << i;\nfor (const auto& n : vec) std::cout << n;`)}`, LESSON_IMGS.cpp[5]) },
+    { id:'cpp-7', title:'Fungsi & Cakupan', content: L('cpp','Fungsi & Cakupan','Bab 11-12 ThePort C++',`
+      ${cb('cpp',`int tambah(int a, int b) { return a + b; }\nvoid gandakan(int& n) { n *= 2; }\n\nint x{7};\ngandakan(x); // x = 14`)}`, LESSON_IMGS.cpp[6]) },
+    { id:'cpp-8', title:'Array, Vector & String', content: L('cpp','Array, Vector & String','Bab 13-14 ThePort C++',`
+      ${cb('cpp',`std::array<int, 4> suhu{18, 20, 23, 21};\nstd::vector<std::string> tugas;\ntugas.push_back("Belajar C++");`)}`, LESSON_IMGS.cpp[7]) },
+    { id:'cpp-9', title:'Pointer & Smart Pointer', content: L('cpp','Pointer & Smart Pointer','Bab 17-18 ThePort C++',`
+      ${cb('cpp',`int angka{9};\nint* alamat{&angka};\n*alamat = 20;\n\nauto ptr = std::make_unique<int>(42);`)}
+      <div class="callout warn"><strong>Hindari new/delete manual.</strong> Pakai smart pointer.</div>`, LESSON_IMGS.cpp[8]) },
+    { id:'cpp-10', title:'Class, STL & Exception', content: L('cpp','Class, STL & Exception','Bab 16,19,21 ThePort C++',`
+      ${cb('cpp',`class Rekening {\n  std::string pemilik;\n  int saldo;\npublic:\n  Rekening(std::string n, int s) : pemilik{n}, saldo{s} {}\n  int lihatSaldo() const { return saldo; }\n};`)}`, LESSON_IMGS.cpp[9]) }
+  ],
+  py: [
+    { id:'py-1', title:'Kenalan dengan Python', content: L('py','Kenalan dengan Python','Bab 1 HANZZY DEV',`
+      <p>Python bahasa tingkat tinggi yang gampang dibaca. Dipakai di AI, data science, web, automation.</p>
+      ${cb('python',`print("Hello, World!")\nnama = "Budi"\numur = 17\nprint(f"Nama {nama}, umur {umur}")`)}`, LESSON_IMGS.py[0]) },
+    { id:'py-2', title:'Setup & Program Pertama', content: L('py','Setup & Program Pertama','Bab 2 HANZZY DEV',`
+      ${cb('python',`# Simpan sebagai halo.py\nprint("Selamat datang di Python!")\nprint(2 + 3)`)}
+      <div class="callout"><strong>Jalankan:</strong> <code>python halo.py</code>.</div>`, LESSON_IMGS.py[1]) },
+    { id:'py-3', title:'Variabel & Tipe Data', content: L('py','Variabel & Tipe Data','Bab 3-4 HANZZY DEV',`
+      ${cb('python',`nama = "Budi"       # str\numur = 17            # int\ntinggi = 165.5       # float\naktif = True         # bool\nprint(type(nama))`)}`, LESSON_IMGS.py[2]) },
+    { id:'py-4', title:'Operator & Ekspresi', content: L('py','Operator & Ekspresi','Bab 5 HANZZY DEV',`
+      ${cb('python',`a, b = 10, 3\nprint(a + b)   # 13\nprint(a // b)  # 3\nprint(a % b)   # 1\nprint(a ** b)  # 1000`)}`, LESSON_IMGS.py[3]) },
+    { id:'py-5', title:'Input & Konversi', content: L('py','Input & Konversi','Bab 6 HANZZY DEV',`
+      ${cb('python',`nama = input("Nama: ")\numur = int(input("Umur: "))\nprint(f"Halo {nama}, umurmu {umur}")`)}
+      <div class="callout warn"><strong>input()</strong> selalu balikin string.</div>`, LESSON_IMGS.py[4]) },
+    { id:'py-6', title:'Percabangan if/elif/else', content: L('py','Percabangan','Bab 7 HANZZY DEV',`
+      ${cb('python',`nilai = 85\nif nilai >= 90:\n    grade = "A"\nelif nilai >= 80:\n    grade = "B"\nelse:\n    grade = "D"`)}`, LESSON_IMGS.py[5]) },
+    { id:'py-7', title:'Perulangan for & while', content: L('py','Perulangan','Bab 8 HANZZY DEV',`
+      ${cb('python',`for i in range(5):\n    print(i)\n\ni = 0\nwhile i < 5:\n    print(i)\n    i += 1`)}`, LESSON_IMGS.py[6]) },
+    { id:'py-8', title:'List, Tuple, Set, Dict', content: L('py','Struktur Data','Bab 10 HANZZY DEV',`
+      ${cb('python',`buah = ["apel", "mangga"]\nbuah.append("jeruk")\nkoordinat = (10, 20)\nunik = {1, 2, 3, 3, 2}\nsiswa = {"nama": "Budi", "umur": 17}`)}`, LESSON_IMGS.py[7]) },
+    { id:'py-9', title:'String & Fungsi', content: L('py','String & Fungsi','Bab 9 & 11 HANZZY DEV',`
+      ${cb('python',`teks = "  Hello Python  "\nprint(teks.strip())\nprint(teks.upper())\n\ndef sapa(nama="Tamu"):\n    return f"Halo, {nama}"`)}`, LESSON_IMGS.py[8]) },
+    { id:'py-10', title:'File, Exception & OOP', content: L('py','File, Exception & OOP','Bab 12,13,15 HANZZY DEV',`
+      ${cb('python',`with open("data.txt", "w") as f:\n    f.write("Halo Dunia\\n")\n\ntry:\n    angka = int(input("Angka: "))\nexcept ValueError:\n    print("Input harus angka")`)}`, LESSON_IMGS.py[9]) }
+  ]
+};
+
+/* ============================================================
+   QUESTIONS
+   ============================================================ */
+const QUESTIONS = {
+  html: [
+    { q:"HTML diciptakan oleh siapa dan tahun berapa?", ref:"Bab 1", options:["Bill Gates, 1995","Tim Berners-Lee, 1989","Linus Torvalds, 1991","Mark Zuckerberg, 2004"], answer:1, explanation:"Tim Berners-Lee menciptakan WWW dan HTML tahun 1989 di CERN." },
+    { q:"Standar HTML5 saat ini dikelola oleh...", ref:"Bab 1", options:["Microsoft & Apple","WHATWG & W3C","Google saja","Mozilla"], answer:1, explanation:"HTML5 adalah Living Standard yang dikelola WHATWG dan W3C." },
+    { q:"Meta tag untuk karakter Indonesia tampil benar...", ref:"Bab 2", options:["charset=ISO-8859-1","charset=UTF-8","charset=ASCII","lang=id"], answer:1, explanation:"UTF-8 wajib agar semua karakter Unicode tampil benar." },
+    { q:"Cara membuat link aman dengan target='_blank'...", ref:"Bab 6", options:["rel='safe'","rel='noopener'","type='external'","secure=true"], answer:1, explanation:"rel='noopener' mencegah celah tabnabbing/phishing." },
+    { q:"Tag semantic untuk konten utama halaman...", ref:"Bab 9", options:["<div>","<main>","<section>","<content>"], answer:1, explanation:"<main> menandai konten utama, satu per halaman." },
+    { q:"Validasi native 'required' pada input...", ref:"Bab 8", options:["Ubah warna","Memaksa input diisi sebelum submit","Sembunyikan input","Tambah animasi"], answer:1, explanation:"required memaksa user mengisi input sebelum form disubmit." },
+    { q:"Atribut scope pada <th> berguna untuk...", ref:"Bab 7", options:["Atur warna","Tentukan header untuk baris/kolom","Sembunyikan kolom","Tambah border"], answer:1, explanation:"scope='col' atau 'row' memberi tahu screen reader relasi header." },
+    { q:"Logical vs physical formatting...", ref:"Bab 3", options:["Sama","Logical (<strong>) sesuai makna, physical (<b>) hanya tampilan","Logical selalu tebal","Physical lebih semantic"], answer:1, explanation:"<strong> menyatakan makna, <b> hanya bold visual." },
+    { q:"Fungsi loading='lazy' pada <img>...", ref:"Bab 5", options:["Percepat render","Tunda load sampai mendekati viewport","Kompres gambar","Ubah format"], answer:1, explanation:"lazy loading hemat bandwidth dan percepat initial load." },
+    { q:"Manfaat <details>/<summary>...", ref:"Bab 9", options:["Tombol","Akordeon interaktif murni HTML","Sembunyikan teks permanen","Tambah animasi"], answer:1, explanation:"<details> membuat disclosure widget tanpa JavaScript." }
+  ],
+  css: [
+    { q:"Specificity dari rendah ke tinggi...", ref:"Bab 1", options:["tag < class < ID < inline","ID < class < tag < inline","class < tag < ID < inline","inline < ID < class < tag"], answer:0, explanation:"Selector tag (1) < class (10) < ID (100) < inline (1000)." },
+    { q:"Bahaya !important berlebihan...", ref:"Bab 1", options:["Percepat render","Rusak maintainability","Tidak jalan","Ubah warna"], answer:1, explanation:"!important melampaui specificity apapun, susah dioverride." },
+    { q:"Selector untuk anak langsung (direct child)...", ref:"Bab 2", options:["nav a","nav > a","nav ~ a","nav + a"], answer:1, explanation:"Tanda > artinya direct child. Spasi artinya descendant." },
+    { q:"Properti untuk mencegah margin collapse...", ref:"Bab 3", options:["overflow:hidden pada child","display:flow-root pada parent","position:absolute","float:left"], answer:1, explanation:"display:flow-root menciptakan BFC yang cegah margin collapse." },
+    { q:"Unit relatif terhadap root font-size...", ref:"Bab 4", options:["px","em","rem","vw"], answer:2, explanation:"rem relatif ke font-size elemen <html>." },
+    { q:"Untuk centering dengan Flexbox di parent...", ref:"Bab 5", options:["margin:auto","display:flex; justify-content:center; align-items:center","position:absolute","text-align:center"], answer:1, explanation:"Kombinasi ini centering sempurna di 2 axis." },
+    { q:"Perbedaan auto-fit vs auto-fill di Grid...", ref:"Bab 6", options:["Sama","auto-fit collapse kolom kosong, auto-fill mempertahankan","auto-fit lebih lambat","auto-fill hanya mobile"], answer:1, explanation:"auto-fit membuat kolom kosong collapse dan item mengisi space." },
+    { q:"Position:sticky berguna untuk...", ref:"Bab 7", options:["Elemen menghilang","Elemen berubah jadi fixed saat mencapai posisi tertentu","Elemen melayang di tengah","Elemen overlap"], answer:1, explanation:"Sticky hybrid: ikuti flow lalu menempel di offset." },
+    { q:"Mobile-first artinya...", ref:"Bab 8", options:["Desain khusus iPhone","Tulis CSS untuk mobile dulu, scale-up dengan min-width","Hindari desktop","JavaScript khusus"], answer:1, explanation:"Default CSS untuk mobile, tambahkan @media (min-width:X) untuk layar besar." },
+    { q:"Animasi transform & opacity lebih ringan karena...", ref:"Bab 9", options:["Lebih pendek","Di-accelerate GPU, tidak trigger Layout/Reflow","Lebih baru","Browser prioritaskan"], answer:1, explanation:"Hanya trigger Composite (GPU), bukan Layout/Paint." }
+  ],
+  js: [
+    { q:"Cara membuat kode JS berjalan di strict mode...", ref:"Bab 1", options:["<script strict>","'use strict'; di awal file/fungsi","mode = strict","strict=true"], answer:1, explanation:"'use strict'; mencegah variabel implicit global." },
+    { q:"IIFE berguna untuk...", ref:"Bab 1", options:["Percepat","Buat private scope, hindari global polluting","Debugging","Async"], answer:1, explanation:"IIFE membuat scope private, variabel tidak bocor ke global." },
+    { q:"Perbedaan let dan const...", ref:"Bab 2", options:["Sama","let bisa di-reassign, const tidak","const bisa di-reassign","let hanya function"], answer:1, explanation:"const tidak bisa di-reassign setelah inisialisasi." },
+    { q:"Hasil dari '5' + 3 di JavaScript...", ref:"Bab 2", options:["8","'53'","NaN","Error"], answer:1, explanation:"Operator + dengan string melakukan konkatenasi." },
+    { q:"Array method untuk transform setiap item...", ref:"Bab 5", options:["forEach","map","filter","reduce"], answer:1, explanation:"map mengembalikan array baru dengan hasil transform." },
+    { q:"Cara menghentikan loop for...", ref:"Bab 6", options:["stop","break","exit","end"], answer:1, explanation:"break keluar dari loop. continue skip iterasi." },
+    { q:"Risiko keamanan dari el.innerHTML = userInput...", ref:"Bab 7", options:["Performa","XSS (Cross-Site Scripting)","Memory leak","Error sintaks"], answer:1, explanation:"innerHTML dengan input user memungkinkan injeksi script (XSS)." },
+    { q:"Event Delegation memanfaatkan...", ref:"Bab 7", options:["Event loop","Event bubbling dari child ke parent","Async/await","Promise"], answer:1, explanation:"Listener dipasang di parent, manfaatkan event bubbling." },
+    { q:"Cara menangani Promise yang gagal...", ref:"Bab 8", options:[".then()",".catch()",".finally()",".done()"], answer:1, explanation:".catch() menangkap error dari Promise." },
+    { q:"Private field di class modern ditandai...", ref:"Bab 9", options:["_var","#var","private var","@var"], answer:1, explanation:"Private field: #nama. _var hanya konvensi." }
+  ],
+  cpp: [
+    { q:"Fungsi utama yang dieksekusi pertama kali di C++...", ref:"Bab 1", options:["start()","main()","begin()","run()"], answer:1, explanation:"Eksekusi C++ selalu dari fungsi main()." },
+    { q:"Inisialisasi kurung kurawal mencegah...", ref:"Bab 3", options:["Kompilasi","Narrowing (penyempitan nilai)","Aliasing","Optimasi"], answer:1, explanation:"int x{3.5}; akan ERROR karena narrowing." },
+    { q:"Untuk membaca seluruh baris termasuk spasi...", ref:"Bab 4", options:["cin >>","std::getline","cin.get()","scanf"], answer:1, explanation:"std::getline(cin, str) baca sampai newline termasuk spasi." },
+    { q:"Hasil dari 17 / 5 di C++ (integer division)...", ref:"Bab 5", options:["3.4","3","4","2"], answer:1, explanation:"Integer division buang pecahan. Cast ke double untuk desimal." },
+    { q:"Operator && melakukan short-circuit, artinya...", ref:"Bab 6", options:["Selalu evaluasi kedua sisi","Berhenti evaluasi jika operand kiri false","Berhenti jika kiri true","Tidak terkait"], answer:1, explanation:"Jika kiri false, hasil && pasti false, kanan tidak dievaluasi." },
+    { q:"Loop untuk iterasi setiap elemen vector modern...", ref:"Bab 10", options:["for (int i=0; i<n; ++i)","for (auto& x : vec)","while (it.hasNext())","foreach(x in vec)"], answer:1, explanation:"Range-based for (C++11+): paling clean dan aman." },
+    { q:"Cara lewat parameter by-reference (bisa ubah aslinya)...", ref:"Bab 11", options:["int x","int& x","int* x","const int x"], answer:1, explanation:"Tanda & membuat parameter jadi reference." },
+    { q:"Header untuk std::vector...", ref:"Bab 14", options:["<array>","<vector>","<list>","<dynamic>"], answer:1, explanation:"<vector> menyediakan std::vector (array dinamis)." },
+    { q:"Smart pointer paling ringan untuk kepemilikan tunggal...", ref:"Bab 18", options:["shared_ptr","unique_ptr","weak_ptr","raw pointer"], answer:1, explanation:"unique_ptr kepemilikan tunggal, paling efisien." },
+    { q:"Exception ditangkap dengan keyword...", ref:"Bab 21", options:["try-catch (seperti JS)","try-catch (C++ juga pakai catch)","try-except","try-handle"], answer:1, explanation:"C++ pakai try { } catch (const std::exception& e) { }." }
+  ],
+  py: [
+    { q:"Fungsi untuk menampilkan output di Python...", ref:"Bab 3", options:["echo()","print()","cout","console.log()"], answer:1, explanation:"print() adalah fungsi bawaan untuk output." },
+    { q:"Hasil dari input() selalu bertipe...", ref:"Bab 6", options:["int","str","float","bebas"], answer:1, explanation:"input() selalu mengembalikan string." },
+    { q:"Operator // di Python...", ref:"Bab 5", options:["Komentar","Floor division","Pangkat","Modulo"], answer:1, explanation:"// adalah floor division: 10 // 3 = 3." },
+    { q:"Cara membuat list kosong...", ref:"Bab 10", options:["list = {}","list = []","list = ()","list = dict()"], answer:1, explanation:"[] adalah list. {} adalah dict. () adalah tuple." },
+    { q:"F-string untuk menampilkan variabel...", ref:"Bab 9", options:["'Halo ' + nama","'Halo {}'.format(nama)","f'Halo {nama}'","'Halo %s' % nama"], answer:2, explanation:"f-string paling modern & cepat (Python 3.6+)." },
+    { q:"Keyword untuk membuat fungsi di Python...", ref:"Bab 11", options:["function","func","def","fn"], answer:2, explanation:"def nama_fungsi(): adalah sintaks fungsi." },
+    { q:"Blok untuk menangani exception di Python...", ref:"Bab 13", options:["try-catch","try-except","try-handle","handle"], answer:1, explanation:"Python pakai try/except." },
+    { q:"Cara aman membuka file di Python...", ref:"Bab 12", options:["f = open('x'); f.read()","with open('x') as f: f.read()","read('x')","file('x').read()"], answer:1, explanation:"with open(...) as f otomatis menutup file." },
+    { q:"Method untuk menambahkan item di akhir list...", ref:"Bab 10", options:["add()","append()","push()","insert()"], answer:1, explanation:"append() menambah di akhir." },
+    { q:"Dalam class Python, self merujuk pada...", ref:"Bab 15", options:["Class sendiri","Instance yang sedang digunakan","Modul","Global scope"], answer:1, explanation:"self adalah referensi ke instance." }
+  ]
+};
+
+const REMEDIAL = {
+  html: [
+    { q:"Standar 'Living Standard' HTML dikelola...", ref:"Bab 1", options:["ISO","WHATWG & W3C","IEEE","ECMA"], answer:1, explanation:"HTML5 Living Standard dikelola WHATWG + W3C." },
+    { q:"Meta tag viewport penting untuk...", ref:"Bab 2", options:["SEO saja","Responsif mobile","Percepat load","Tambah font"], answer:1, explanation:"viewport meta memastikan halaman di-scale benar di mobile." },
+    { q:"Open Graph (og:title, og:image) berguna untuk...", ref:"Bab 2", options:["SEO lokal","Preview link sosial media","Loading gambar","Autentikasi"], answer:1, explanation:"OG tags kontrol tampilan link saat dibagikan." },
+    { q:"Cara membuat description list benar...", ref:"Bab 4", options:["<list><item>","<dl><dt><dd>","<ul><li>","<ol><li>"], answer:1, explanation:"<dl> (definition list) berisi <dt> dan <dd>." },
+    { q:"Format gambar modern paling efisien...", ref:"Bab 5", options:["BMP","WebP/AVIF","TIFF","RAW"], answer:1, explanation:"WebP/AVIF kompresi lebih baik dari JPEG/PNG." },
+    { q:"Anchor <a href='#section'> berguna untuk...", ref:"Bab 6", options:["Link eksternal","Link ke elemen id='section' di halaman sama","Download file","Kirim email"], answer:1, explanation:"#section scroll ke elemen dengan id tersebut." },
+    { q:"Atribut colspan untuk...", ref:"Bab 7", options:["Gabung baris","Gabung kolom","Hapus kolom","Tambah warna"], answer:1, explanation:"colspan='2' = sel gabungkan 2 kolom." },
+    { q:"Input type='email' otomatis validasi...", ref:"Bab 8", options:["Warna","Format email","Angka","Tanggal"], answer:1, explanation:"type='email' browser validasi format email tanpa JS." },
+    { q:"<figure> dan <figcaption> untuk...", ref:"Bab 9", options:["Layout grid","Gambar dengan keterangan","Navigasi","Form"], answer:1, explanation:"<figure> mengelompokkan konten visual + keterangan." },
+    { q:"W3C Validator berguna untuk...", ref:"Bab 10", options:["Compile kode","Cek validitas HTML","Minify kode","Deploy web"], answer:1, explanation:"Validator memastikan HTML sesuai standar W3C." }
+  ],
+  css: [
+    { q:"Kaskade CSS artinya...", ref:"Bab 1", options:["Semua langsung jalan","Aturan diurutkan berdasarkan specificity + urutan","Random","Bergantung warna"], answer:1, explanation:"Cascade: specificity lebih tinggi atau ditulis akhir menang." },
+    { q:"Pseudo-class :hover digunakan untuk...", ref:"Bab 2", options:["Klik","Saat mouse di atas elemen","Focus","Disabled"], answer:1, explanation:":hover aktif saat pointer di atas elemen." },
+    { q:"box-sizing: border-box membuat...", ref:"Bab 3", options:["Border di luar","Width mencakup padding + border","Hilangkan margin","Transparent"], answer:1, explanation:"border-box: width sudah termasuk padding & border." },
+    { q:"Fungsi backdrop-filter: blur(10px)...", ref:"Bab 4", options:["Blur gambar","Blur konten di belakang (glassmorphism)","Blur teks","Blur border"], answer:1, explanation:"Blur konten di belakang elemen — efek frosted glass." },
+    { q:"flex: 1 1 200px artinya...", ref:"Bab 5", options:["width 200px","grow 1, shrink 1, basis 200px","min-width 200px","margin 200px"], answer:1, explanation:"Shorthand: flex-grow flex-shrink flex-basis." },
+    { q:"grid-template-areas memudahkan karena...", ref:"Bab 6", options:["Cepat","Buat layout dengan representasi visual teks","Kompatibel lama","Ringan"], answer:1, explanation:"Bisa 'menggambar' layout sebagai grid teks." },
+    { q:"Z-index hanya bekerja jika elemen...", ref:"Bab 7", options:["Warna","position selain static + stacking context","Animasi","Border"], answer:1, explanation:"Z-index butuh position atau stacking context." },
+    { q:"clamp(1rem, 5vw, 3rem) artinya...", ref:"Bab 8", options:["Random 1-3","Nilai fluid antara min 1rem dan max 3rem","Fixed 1rem","Fixed 3rem"], answer:1, explanation:"clamp(min, ideal, max): nilai dibatasi antara min dan max." },
+    { q:"@keyframes digunakan untuk...", ref:"Bab 9", options:["Transisi sederhana","Definisi tahapan animasi kompleks","Media query","Import font"], answer:1, explanation:"@keyframes definisikan animasi multi-step." },
+    { q:"CSS Custom Property berbeda dari SCSS variable karena...", ref:"Bab 10", options:["Sama","Bisa diubah runtime + cascade","Tidak bisa dipakai","Hanya di media query"], answer:1, explanation:"CSS Variables properti CSS asli, bisa diubah runtime via JS." }
+  ],
+  js: [
+    { q:"typeof null mengembalikan...", ref:"Bab 2", options:["'null'","'object'","'undefined'","Error"], answer:1, explanation:"typeof null = 'object' — bug historis JavaScript." },
+    { q:"Perbedaan == dan ===...", ref:"Bab 3", options:["Sama","== bandingkan nilai dengan coercion, === bandingkan nilai + tipe","=== lebih lambat","== lebih aman"], answer:1, explanation:"Selalu gunakan === (strict equality)." },
+    { q:"Nilai dari [] + [] di JavaScript...", ref:"Bab 3", options:["[]","''","0","Error"], answer:1, explanation:"Array di-coerce ke string, jadi [] + [] = ''." },
+    { q:"Cara membuat fungsi dengan jumlah argumen tidak tetap...", ref:"Bab 4", options:["array argumen","rest parameter (...args)","arguments khusus","tidak bisa"], answer:1, explanation:"function f(...args) — args adalah array semua argumen." },
+    { q:"Array method yang mengembalikan array baru (tidak mutasi)...", ref:"Bab 5", options:["push","map, filter","pop","splice"], answer:1, explanation:"map dan filter tidak ubah array asli." },
+    { q:"for...of berbeda dari for...in karena...", ref:"Bab 6", options:["Sama","for...of iterasi values, for...in iterasi keys","for...of hanya objek","for...in lebih modern"], answer:1, explanation:"for...of dapat value, for...in dapat key/index." },
+    { q:"querySelectorAll mengembalikan...", ref:"Bab 7", options:["Array","NodeList (bukan Array asli)","Object","String"], answer:1, explanation:"NodeList bukan Array asli. Untuk method array, ubah dulu: [...list]." },
+    { q:"Event bubbling adalah...", ref:"Bab 7", options:["Event hilang","Event dari child naik ke parent","Event diblokir","Event duplicate"], answer:1, explanation:"Event bubbling: event dari child naik ke parent." },
+    { q:"Microtask vs macrotask...", ref:"Bab 8", options:["Bersamaan","Microtask (Promise) lebih dulu dari macrotask (setTimeout)","Macrotask dulu","Random"], answer:1, explanation:"Event loop: microtask dieksekusi dulu, baru macrotask." },
+    { q:"Class field 'static' artinya...", ref:"Bab 9", options:["Private","Milik class sendiri, bukan instance","Immutable","Readonly"], answer:1, explanation:"static milik class, diakses via ClassName.staticMethod()." }
+  ],
+  cpp: [
+    { q:"Header <iostream> menyediakan...", ref:"Bab 1", options:["Matematika","cin, cout, cerr","String","Vector"], answer:1, explanation:"iostream menyediakan std::cin, std::cout, std::cerr." },
+    { q:"Baris #include <iostream> dilakukan oleh...", ref:"Bab 2", options:["Runtime","Preprocessor saat compile","Browser","OS"], answer:1, explanation:"#include adalah directive preprocessor." },
+    { q:"Tipe double vs float...", ref:"Bab 3", options:["Sama","double presisi lebih tinggi (64-bit vs 32-bit)","float lebih akurat","double untuk integer"], answer:1, explanation:"double ~15-16 digit presisi, float ~6-7 digit." },
+    { q:"std::cerr berbeda dari std::cout karena...", ref:"Bab 4", options:["Sama","cerr untuk error (unbuffered), cout output normal","cerr lebih cepat","cout untuk error"], answer:1, explanation:"cerr adalah error stream tidak di-buffer." },
+    { q:"Operator % tidak bisa dipakai untuk...", ref:"Bab 5", options:["int","double/float","long","semua tipe"], answer:1, explanation:"Operator % hanya untuk integer." },
+    { q:"Perbedaan = dan == di C++...", ref:"Bab 6", options:["Sama","= assignment, == perbandingan","== assignment","tidak ada"], answer:1, explanation:"= menugaskan nilai, == membandingkan." },
+    { q:"switch case tanpa break akan...", ref:"Bab 8", options:["Error","Fall through ke case berikutnya","Exit program","Loop"], answer:1, explanation:"Tanpa break, eksekusi lanjut ke case berikutnya (fall-through)." },
+    { q:"Range-based for (for (auto x : v)) butuh...", ref:"Bab 10", options:["Index manual","Container dengan begin() dan end()","Pointer","Tidak ada syarat"], answer:1, explanation:"Range-based for butuh container dengan begin() dan end()." },
+    { q:"Nilai balik int main() 0 menandakan...", ref:"Bab 1", options:["Error","Program selesai sukses","Program crash","Compile error"], answer:1, explanation:"return 0 menandakan program selesai normal (exit code 0)." },
+    { q:"Smart pointer unique_ptr otomatis...", ref:"Bab 18", options:["Compile error","Free memory saat keluar scope (RAII)","Share ke banyak pointer","Tidak pernah free"], answer:1, explanation:"unique_ptr menggunakan RAII: memory otomatis di-free." }
+  ],
+  py: [
+    { q:"Python adalah bahasa...", ref:"Bab 1", options:["Compiled murni","Interpreted","Assembly","Machine code"], answer:1, explanation:"Python dijalankan oleh interpreter (CPython)." },
+    { q:"Komentar satu baris di Python dimulai...", ref:"Bab 3", options:["//","#","--","/*"], answer:1, explanation:"# untuk komentar satu baris." },
+    { q:"Fungsi type() berguna untuk...", ref:"Bab 4", options:["Konversi tipe","Cek tipe data sebuah nilai","Ubah string","Buat variabel"], answer:1, explanation:"type(x) mengembalikan tipe data x." },
+    { q:"Operator ** di Python...", ref:"Bab 5", options:["Perkalian","Pangkat","Modulo","Floor division"], answer:1, explanation:"2 ** 3 = 8. Untuk akar: 9 ** 0.5 = 3.0." },
+    { q:"Konversi string '123' ke integer...", ref:"Bab 6", options:["str('123')","int('123')","float('123')","num('123')"], answer:1, explanation:"int('123') = 123. Konversi gagal = ValueError." },
+    { q:"Cara menulis if yang benar...", ref:"Bab 7", options:["if x > 0 print()","if x > 0: print()","if (x > 0) { print }","if x > 0 then print"], answer:1, explanation:"Python pakai titik dua (:) dan indentasi." },
+    { q:"break di loop Python berfungsi...", ref:"Bab 8", options:["Skip iterasi","Keluar dari loop","Restart loop","Pause"], answer:1, explanation:"break menghentikan loop sepenuhnya." },
+    { q:"Dictionary Python menyimpan data dalam bentuk...", ref:"Bab 10", options:["Index 0,1,2","Key-value pairs","Hanya angka","Urutan acak"], answer:1, explanation:"Dict menyimpan pasangan key:value." },
+    { q:"with open('file.txt') as f: berfungsi untuk...", ref:"Bab 12", options:["Buka tanpa menutup","Otomatis menutup file setelah blok selesai","Enkripsi file","Upload file"], answer:1, explanation:"with statement memastikan file ditutup otomatis." },
+    { q:"Method __init__ dalam class Python...", ref:"Bab 15", options:["Method biasa","Constructor, dipanggil saat object dibuat","Destructor","Static method"], answer:1, explanation:"__init__ adalah constructor: dipanggil otomatis saat object dibuat." }
+  ]
+};
+
+const EXAMS = [
+  { id:'html-exam-01', course:'html', title:'HTML Fundamentals Exam', desc:'Ujian dasar HTML: struktur, semantik, form, aksesibilitas.', duration:60, passingScore:75, status:'available', token:'HXJ-HTML01' },
+  { id:'css-exam-01', course:'css', title:'CSS Fundamentals Exam', desc:'Ujian dasar CSS: selector, box model, flexbox, grid, responsive.', duration:60, passingScore:75, status:'available', token:'HXJ-CSS001' },
+  { id:'js-exam-01', course:'js', title:'JavaScript Fundamentals Exam', desc:'Ujian dasar JS: variabel, fungsi, DOM, async, OOP ES6.', duration:60, passingScore:75, status:'available', token:'HXJ-JS0001' },
+  { id:'cpp-exam-01', course:'cpp', title:'C++ Fundamentals Exam', desc:'Ujian dasar C++: tipe data, pointer, STL, OOP.', duration:60, passingScore:75, status:'available', token:'HXJ-CPP001' },
+  { id:'py-exam-01', course:'py', title:'Python Fundamentals Exam', desc:'Ujian dasar Python: sintaks, struktur data, file, OOP.', duration:60, passingScore:75, status:'available', token:'HXJ-PY0001' },
+  { id:'html-exam-02', course:'html', title:'HTML Advanced Exam', desc:'Ujian lanjutan.', duration:60, passingScore:75, status:'upcoming', token:'' },
+  { id:'css-exam-02', course:'css', title:'CSS Advanced Exam', desc:'Ujian lanjutan.', duration:60, passingScore:75, status:'upcoming', token:'' },
+  { id:'py-final', course:'py', title:'Python Final Exam', desc:'Ujian akhir.', duration:60, passingScore:75, status:'upcoming', token:'' }
+];
+
+/* ============================================================
+   STORAGE
+   ============================================================ */
+const STORAGE_KEY = 'hanzzy_v7';
+const EXAM_TIME_KEY = 'hanzzy_exam_v7';
+function defaultStore(){ return {lessonsDone:{},practice:{},remedial:{},examsDone:{},history:[],theme:'dark',playground:{html:'',css:'',js:''}}; }
+function loadStore(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||defaultStore(); }catch{ return defaultStore(); } }
+function saveStore(s){ localStorage.setItem(STORAGE_KEY,JSON.stringify(s)); }
+let STORE = loadStore();
+function markLessonDone(c,l){ STORE.lessonsDone[c]=STORE.lessonsDone[c]||[]; if(!STORE.lessonsDone[c].includes(l)){STORE.lessonsDone[c].push(l);saveStore(STORE);} }
+function isLessonDone(c,l){ return (STORE.lessonsDone[c]||[]).includes(l); }
+function courseProgress(c){ const t=LESSONS[c].length; const d=(STORE.lessonsDone[c]||[]).length; return {done:d,total:t,pct:t?Math.round(d/t*100):0}; }
+function pickN(arr,n){ const a=arr.slice(); const out=[]; while(out.length<n&&a.length) out.push(a.splice(Math.floor(Math.random()*a.length),1)[0]); return out; }
+function isExamUnlocked(id){ return sessionStorage.getItem('exam_unlock_'+id) === 'yes'; }
+function unlockExam(id){ sessionStorage.setItem('exam_unlock_'+id, 'yes'); }
+function lockExam(id){ sessionStorage.removeItem('exam_unlock_'+id); }
+
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  const ic = document.getElementById('themeIcon');
+  if(ic) ic.innerHTML = t==='dark'
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+  STORE.theme=t; saveStore(STORE);
+}
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+});
+
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+window.copyCode = function(btn){
+  const wrap = btn.closest('.cb');
+  const lines = wrap.querySelectorAll('.cb-body .code');
+  const text = Array.from(lines).map(l=>l.textContent).join('\n');
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied'; btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done');},1400);
+  });
+};
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+function parseRoute(){ const h=location.hash.replace(/^#/,'')||'/'; const p=h.split('/').filter(Boolean); return {path:'/'+p.join('/'),parts:p}; }
+function render(){
+  const route = parseRoute();
+  const app = document.getElementById('app');
+  app.innerHTML='';
+  document.querySelectorAll('.nav-link').forEach(l=>{
+    const r = l.getAttribute('href').replace('#','');
+    l.classList.toggle('active', route.path===r || (r!=='/' && route.path.startsWith(r)));
+  });
+  if(route.parts[0]==='materi') return renderMateri(route.parts[1],route.parts[2]);
+  if(route.parts[0]==='quiz')   return renderQuiz(route.parts[1],route.parts[2]||'practice');
+  if(route.parts[0]==='exam')   return renderExamDetail(route.parts[1]);
+  if(route.parts[0]==='exam-result') return renderExamResult(route.parts[1]);
+  const map = {
+    '/': renderHome, '/belajar': renderBelajar, '/ebook': renderEbook,
+    '/latihan': renderLatihan, '/ujian': renderUjian, '/playground': renderPlayground,
+    '/progress': renderProgress, '/about': renderAbout, '/contact': renderContact,
+    '/privacy': renderPrivacy, '/terms': renderTerms, '/faq': renderFaq
+  };
+  const fn = map[route.path]||renderNotFound;
+  fn();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+window.addEventListener('hashchange',render);
+
+/* ============================================================
+   HOME
+   ============================================================ */
+function renderHome(){
+  document.getElementById('app').innerHTML=`
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <div class="hero-tag"><span class="dot"></span> Platform belajar coding · 2026</div>
+            <h1>Belajar Coding<br><span class="grad">Terstruktur &amp; Terarah.</span></h1>
+            <p class="lead">Kuasai <strong>HTML, CSS, JavaScript, C++, dan Python</strong> dengan materi, latihan, dan ujian yang nyambung sama e-book ThePort & HANZZY DEV.</p>
+            <div class="hero-cta">
+              <a href="#/belajar" class="btn btn-primary btn-lg">Mulai Belajar ${SVG.iconArrow}</a>
+              <a href="#/ebook" class="btn btn-ghost btn-lg">${SVG.iconBook} Lihat E-Book</a>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat"><b>5</b><span>Courses</span></div>
+              <div class="hero-stat"><b>50</b><span>Materi</span></div>
+              <div class="hero-stat"><b>100</b><span>Soal</span></div>
+              <div class="hero-stat"><b>8</b><span>Exam</span></div>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-code">
+              <div class="code-bar">
+                <div class="code-dots"><span></span><span></span><span></span></div>
+                <span class="code-title">hanzzy_edu.py</span>
+                <span class="code-lang">python</span>
+              </div>
+              <div class="code-body">
+                <div><span class="ln">1</span><span class="cm"># Learn. Practice. Improve.</span></div>
+                <div><span class="ln">2</span><span class="kw">class</span> <span class="fn">Student</span>:</div>
+                <div><span class="ln">3</span>    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, nama):</div>
+                <div><span class="ln">4</span>        <span class="nm">self</span>.nama = nama</div>
+                <div><span class="ln">5</span></div>
+                <div><span class="ln">6</span>    <span class="kw">def</span> <span class="fn">belajar</span>(<span class="nm">self</span>):</div>
+                <div><span class="ln">7</span>        <span class="kw">return</span> <span class="st">f"Halo {self.nama}"</span></div>
+                <div><span class="ln">8</span></div>
+                <div><span class="ln">9</span>s = <span class="fn">Student</span>(<span class="st">"Kamu"</span>)</div>
+                <div><span class="ln">10</span><span class="fn">print</span>(s.<span class="fn">belajar</span>())</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Gallery</div>
+          <h2>Suasana Belajar</h2>
+          <p>Beberapa momen dan vibe ngoding yang bikin semangat terus.</p>
+        </div>
+        <div class="gallery-grid">
+          ${GALLERY.map(g=>`<div class="gallery-item"><img src="${g.url}" alt="${g.title}" loading="lazy"><div class="overlay"><span>${g.title}</span></div></div>`).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Courses</div>
+          <h2>Pilih Bahasa Pemrograman</h2>
+          <p>Lima jalur belajar terstruktur. Konten diselaraskan dengan e-book ThePort (HTML, CSS, JS, C++) dan HANZZY DEV (Python).</p>
+        </div>
+        <div class="courses-grid">${Object.values(COURSES).map(c=>courseCard(c)).join('')}</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Features</div>
+          <h2>Yang Bikin Beda</h2>
+          <p>Semua yang kamu butuhin buat ngusai pemrograman dari nol.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature"><div class="feature-icon">${SVG.iconBook}</div><h3>Materi Nyambung E-Book</h3><p>Tiap materi ada tag referensi bab e-book biar gampang cross-check.</p></div>
+          <div class="feature"><div class="feature-icon">${SVG.iconPencil}</div><h3>Latihan & Remedial</h3><p>50 soal latihan + 50 soal remedial, semua ada tag bab-nya.</p></div>
+          <div class="feature"><div class="feature-icon">${SVG.iconClock}</div><h3>Ujian Timer</h3><p>Ujian 60 menit, timer tetep akurat walau di-refresh.</p></div>
+          <div class="feature"><div class="feature-icon">${SVG.iconChart}</div><h3>Tracking Progress</h3><p>Dashboard progress interaktif, data kesimpen di browser lu.</p></div>
+          <div class="feature"><div class="feature-icon">${SVG.iconPlay}</div><h3>Code Playground</h3><p>Tulis HTML/CSS/JS, liat hasil live di iframe sandbox.</p></div>
+          <div class="feature"><div class="feature-icon">${SVG.iconLock}</div><h3>Ujian Token</h3><p>Tiap ujian butuh token dari pengajar. Aman dari akses liar.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Learning Path</div>
+          <h2>Alur Belajar</h2>
+          <p>Ikutin alur ini biar pengalaman belajar lu maksimal.</p>
+        </div>
+        <div class="path-grid">
+          <div class="path-step"><span class="num">01</span><h4>Belajar Materi</h4><p>Materi terstruktur dengan tag referensi bab e-book.</p></div>
+          <div class="path-step"><span class="num">02</span><h4>Baca E-Book</h4><p>Akses PDF langsung di browser.</p></div>
+          <div class="path-step"><span class="num">03</span><h4>Latihan</h4><p>10 soal quiz interaktif per course.</p></div>
+          <div class="path-step"><span class="num">04</span><h4>Remedial</h4><p>Perbaiki kalau nilai belum capai 75.</p></div>
+          <div class="path-step"><span class="num">05</span><h4>Ujian</h4><p>Assessment resmi timer 60 menit + token.</p></div>
+          <div class="path-step"><span class="num">06</span><h4>Progress</h4><p>Pantau perkembangan di dashboard.</p></div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function courseCard(c){
+  const p = courseProgress(c.id);
+  return `<a href="#/materi/${c.id}/${LESSONS[c.id][0].id}" class="course-card">
+    <div class="course-banner">${c.visual}</div>
+    <div class="course-body">
+      <div class="course-row">
+        <div class="course-icon ${c.id}">${c.icon}</div>
+        <div class="course-title"><h3>${c.name}</h3><p>${c.tagline}</p></div>
+      </div>
+      <p class="course-desc">${c.desc}</p>
+      <div class="course-meta">
+        <span>${SVG.iconBook} ${LESSONS[c.id].length} Materi</span>
+        <span>${SVG.iconPencil} ${QUESTIONS[c.id].length} Soal</span>
+      </div>
+      <div class="course-progress"><div class="bar" style="width:${p.pct}%;background:${c.color};"></div></div>
+      <div class="course-footer">
+        <span class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">Mulai</span>
+        <span class="pct">${p.pct}%</span>
+      </div>
+    </div>
+  </a>`;
+}
+
+function renderBelajar(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Belajar</div>
+          <h2>Course Pembelajaran</h2>
+          <p>Pilih bahasa pemrograman buat mulai belajar.</p>
+        </div>
+        <div class="courses-grid">${Object.values(COURSES).map(c=>courseCard(c)).join('')}</div>
+      </div>
+    </section>`;
+}
+
+function renderMateri(courseId, lessonId){
+  const course = COURSES[courseId];
+  if(!course) return renderNotFound();
+  const lessons = LESSONS[courseId];
+  if(!lessonId) lessonId = lessons[0].id;
+  const lesson = lessons.find(l=>l.id===lessonId) || lessons[0];
+  const idx = lessons.findIndex(l=>l.id===lessonId);
+  const prev = idx>0 ? lessons[idx-1] : null;
+  const next = idx<lessons.length-1 ? lessons[idx+1] : null;
+
+  document.getElementById('app').innerHTML=`
+    <div class="wrap">
+      <div class="materi-layout">
+        <aside class="sidebar">
+          <div class="sidebar-head">
+            <h3>${course.icon} ${course.name}</h3>
+            <p>${lessons.length} materi · ${course.ebookName}</p>
+          </div>
+          <div class="lesson-list">
+            ${lessons.map((l,i)=>{
+              const done = isLessonDone(courseId,l.id);
+              const active = l.id===lessonId;
+              return `<a href="#/materi/${courseId}/${l.id}" class="lesson-item ${active?'active':''} ${done?'done':''}">
+                <div class="n"><span>${String(i+1).padStart(2,'0')}</span></div>
+                <span>${l.title}</span>
+              </a>`;
+            }).join('')}
+          </div>
+        </aside>
+        <div class="content">
+          ${lesson.content}
+          <div class="content-foot">
+            <div>${prev?`<a href="#/materi/${courseId}/${prev.id}" class="btn btn-ghost btn-sm">← ${prev.title}</a>`:''}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" id="markDone">Tandai Selesai</button>
+              ${next?`<a href="#/materi/${courseId}/${next.id}" class="btn btn-primary btn-sm">${next.title} →</a>`:`<a href="#/quiz/${courseId}/practice" class="btn btn-primary btn-sm">Mulai Latihan →</a>`}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('markDone').addEventListener('click',()=>{
+    markLessonDone(courseId,lessonId);
+    toast('Materi ditandai selesai');
+    renderMateri(courseId,lessonId);
+  });
+}
+
+const EBOOK_FILES = { html:'ebook/html.pdf', css:'ebook/css.pdf', js:'ebook/javascript.pdf', cpp:'ebook/cpp.pdf', py:'ebook/python.pdf' };
+function renderEbook(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">E-Book</div>
+          <h2>Perpustakaan E-Book</h2>
+          <p>Baca e-book pembelajaran langsung di browser.</p>
+        </div>
+        <div class="ebook-grid">
+          ${Object.values(COURSES).map(c=>`
+            <div class="ebook-card">
+              <div class="ebook-cover">${ebookCover(c.id,c.name)}</div>
+              <div class="ebook-info">
+                <h4>${c.name} E-Book</h4>
+                <p>${c.ebookName}</p>
+                <button class="btn btn-primary btn-sm btn-block" onclick="openReader('${c.id}')">${SVG.iconBook} Baca</button>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>`;
+}
+window.openReader = function(courseId){
+  const course = COURSES[courseId];
+  const path = EBOOK_FILES[courseId];
+  document.getElementById('readerTitle').textContent = `${course.name} E-Book — ${course.ebookName}`;
+  document.getElementById('readerDownload').onclick = ()=>{ const a=document.createElement('a'); a.href=path; a.download=`${course.name}.pdf`; a.click(); };
+  document.getElementById('readerBody').innerHTML = `
+    <object data="${path}" type="application/pdf" style="width:100%;height:100%;">
+      <iframe src="${path}" style="width:100%;height:100%;border:0;">
+        <div class="reader-empty">${SVG.emptyBox}<h3>E-Book belum tersedia</h3><p>File PDF belum diupload.</p></div>
+      </iframe>
+    </object>`;
+  document.getElementById('readerModal').classList.add('show');
+  document.body.style.overflow='hidden';
+};
+document.getElementById('readerClose').addEventListener('click',()=>{
+  document.getElementById('readerModal').classList.remove('show');
+  document.getElementById('readerBody').innerHTML='';
+  document.body.style.overflow='';
+});
+document.getElementById('readerModal').addEventListener('click',e=>{ if(e.target.id==='readerModal') document.getElementById('readerClose').click(); });
+
+function renderLatihan(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Latihan</div>
+          <h2>Latihan Soal</h2>
+          <p>Tiap soal ada tag referensi bab e-book. Skor minimal: 75.</p>
+        </div>
+        <div class="courses-grid">
+          ${Object.values(COURSES).map(c=>{
+            const p = STORE.practice[c.id]||{};
+            const last = p.lastScore;
+            return `<div class="course-card" style="cursor:default;">
+              <div class="course-banner">${c.visual}</div>
+              <div class="course-body">
+                <div class="course-row">
+                  <div class="course-icon ${c.id}">${c.icon}</div>
+                  <div class="course-title"><h3>${c.name}</h3><p>10 soal · ${c.ebookName}</p></div>
+                </div>
+                <p class="course-desc">${c.desc}</p>
+                ${last!==undefined?`<div class="callout" style="margin:0 0 12px;font-size:0.76rem;padding:9px 12px;">Skor terakhir: <strong style="color:${last>=75?'var(--success)':'var(--danger)'};">${last}/100</strong></div>`:''}
+                <div class="course-footer">
+                  <a href="#/quiz/${c.id}/practice" class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">Mulai Latihan</a>
+                  <a href="#/quiz/${c.id}/remedial" class="btn btn-ghost btn-sm">Remedial</a>
+                </div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </section>`;
+}
+
+let QUIZ = null;
+function renderQuiz(courseId, mode){
+  const course = COURSES[courseId];
+  if(!course) return renderNotFound();
+  if(mode!=='practice'&&mode!=='remedial') mode='practice';
+  const pool = mode==='remedial' ? REMEDIAL[courseId] : QUESTIONS[courseId];
+  if(!QUIZ || QUIZ.courseId!==courseId || QUIZ.mode!==mode){
+    QUIZ = {courseId,mode,questions:pool,current:0,answers:new Array(pool.length).fill(null),revealed:new Array(pool.length).fill(false),finished:false};
+  }
+  if(QUIZ.finished) return renderQuizResult();
+
+  const q = QUIZ.questions[QUIZ.current];
+  const total = QUIZ.questions.length;
+  const answered = QUIZ.answers[QUIZ.current];
+  const revealed = QUIZ.revealed[QUIZ.current];
+  const pct = Math.round((QUIZ.current/total)*100);
+
+  document.getElementById('app').innerHTML=`
+    <section class="quiz-wrap">
+      <div class="quiz-top">
+        <div>
+          <div class="quiz-step">Pertanyaan ${String(QUIZ.current+1).padStart(2,'0')} / ${total}</div>
+          <div class="quiz-title">${course.name} · ${mode==='remedial'?'Remedial':'Latihan'}</div>
+        </div>
+        <div class="quiz-badge">${q.ref||''}</div>
+      </div>
+      <div class="quiz-bar"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="quiz-card">
+        <div class="quiz-question">${q.q}<small>Ref: ${q.ref||''} dari e-book</small></div>
+        <div class="quiz-options">
+          ${q.options.map((opt,i)=>{
+            let cls='';
+            if(revealed){ if(i===q.answer) cls='correct'; else if(i===answered) cls='wrong'; }
+            else if(i===answered) cls='selected';
+            return `<button class="opt ${cls}" onclick="selectOption(${i})" ${revealed?'disabled':''}>
+              <span class="k">${String.fromCharCode(65+i)}</span><span>${opt}</span>
+            </button>`;
+          }).join('')}
+        </div>
+        <div class="explanation ${revealed?'show':''}"><strong>Pembahasan:</strong> ${q.explanation}</div>
+        <div class="quiz-foot">
+          <button class="btn btn-ghost btn-sm" onclick="quizPrev()" ${QUIZ.current===0?'disabled':''}>← Sebelumnya</button>
+          ${revealed
+            ? (QUIZ.current===total-1?`<button class="btn btn-primary btn-sm" onclick="quizFinish()">Lihat Hasil →</button>`:`<button class="btn btn-primary btn-sm" onclick="quizNext()">Selanjutnya →</button>`)
+            : (answered!==null?`<button class="btn btn-primary btn-sm" onclick="quizReveal()">Periksa Jawaban</button>`:`<button class="btn btn-ghost btn-sm" disabled>Pilih jawaban dulu</button>`)}
+        </div>
+      </div>
+    </section>`;
+}
+window.selectOption = i => { if(!QUIZ.revealed[QUIZ.current]){ QUIZ.answers[QUIZ.current]=i; renderQuiz(QUIZ.courseId,QUIZ.mode); } };
+window.quizPrev = ()=>{ if(QUIZ.current>0){QUIZ.current--;renderQuiz(QUIZ.courseId,QUIZ.mode);} };
+window.quizNext = ()=>{ if(QUIZ.current<QUIZ.questions.length-1){QUIZ.current++;renderQuiz(QUIZ.courseId,QUIZ.mode);} };
+window.quizReveal = ()=>{ QUIZ.revealed[QUIZ.current]=true; renderQuiz(QUIZ.courseId,QUIZ.mode); };
+window.quizFinish = ()=>{
+  QUIZ.finished = true;
+  let correct=0;
+  QUIZ.questions.forEach((q,i)=>{ if(QUIZ.answers[i]===q.answer) correct++; });
+  const total = QUIZ.questions.length;
+  const score = Math.round((correct/total)*100);
+  const passed = score>=75;
+  if(QUIZ.mode==='practice'){ STORE.practice[QUIZ.courseId]={lastScore:score,attempts:((STORE.practice[QUIZ.courseId]?.attempts)||0)+1,best:Math.max(score,STORE.practice[QUIZ.courseId]?.best||0)}; }
+  else { STORE.remedial[QUIZ.courseId]={lastScore:score,attempts:((STORE.remedial[QUIZ.courseId]?.attempts)||0)+1,passed}; }
+  STORE.history.unshift({type:QUIZ.mode,course:QUIZ.courseId,title:`${COURSES[QUIZ.courseId].name} ${QUIZ.mode==='remedial'?'Remedial':'Latihan'}`,score,total:100,passed,date:new Date().toISOString()});
+  STORE.history = STORE.history.slice(0,50);
+  saveStore(STORE);
+  renderQuizResult();
+};
+function renderQuizResult(){
+  const course = COURSES[QUIZ.courseId];
+  let correct=0; const wrongList=[];
+  QUIZ.questions.forEach((q,i)=>{ if(QUIZ.answers[i]===q.answer) correct++; else wrongList.push({q,given:QUIZ.answers[i],i}); });
+  const total = QUIZ.questions.length;
+  const score = Math.round((correct/total)*100);
+  const passed = score>=75;
+  const isRemedial = QUIZ.mode==='remedial';
+  document.getElementById('app').innerHTML=`
+    <section class="quiz-wrap">
+      <div class="result-card">
+        <div class="result-status ${passed?'pass':'fail'}">${passed?'PASSED':'REMEDIAL REQUIRED'}</div>
+        <div class="result-score ${passed?'pass':'fail'}">${score}</div>
+        <div class="result-sub">/ 100 · ${course.name} ${isRemedial?'Remedial':'Latihan'}</div>
+        <div class="result-stats">
+          <div class="result-stat"><b style="color:var(--success)">${correct}</b><span>Correct</span></div>
+          <div class="result-stat"><b style="color:var(--danger)">${total-correct}</b><span>Wrong</span></div>
+        </div>
+        ${!passed?`<div class="callout warn" style="text-align:left;"><strong>Nilai belum capai 75.</strong> Pelajari lagi materi terkait terus remedial.</div>`:`<div class="callout tip" style="text-align:left;"><strong>Selamat!</strong> Lu lulus ${isRemedial?'remedial':'latihan'} ${course.name}.</div>`}
+        <div class="result-actions">
+          <button class="btn btn-primary btn-sm" onclick="restartQuiz()">Ulangi</button>
+          <a href="#/belajar" class="btn btn-ghost btn-sm">Kembali Belajar</a>
+          ${!passed?`<a href="#/quiz/${course.id}/remedial" class="btn btn-primary btn-sm">Mulai Remedial</a>`:''}
+        </div>
+        ${wrongList.length?`
+          <div class="review-list">
+            <h3>Pembahasan Soal Salah</h3>
+            ${wrongList.map(w=>`<div class="review-item">
+              <div class="rq">${w.i+1}. ${w.q.q} <small>[${w.q.ref||''}]</small></div>
+              <div class="ra">
+                Jawabanmu: <b class="no">${w.given!==null?w.q.options[w.given]:'Tidak dijawab'}</b><br>
+                Jawaban benar: <b class="ok">${w.q.options[w.q.answer]}</b><br>
+                <em>${w.q.explanation}</em>
+              </div>
+            </div>`).join('')}
+          </div>`:''}
+      </div>
+    </section>`;
+}
+window.restartQuiz = ()=>{ QUIZ=null; const r=parseRoute(); renderQuiz(r.parts[1],r.parts[2]||'practice'); };
+
+function renderUjian(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Ujian</div>
+          <h2>Exam Center</h2>
+          <p>Ujian resmi 60 menit. Butuh token dari pengajar untuk membuka ujian.</p>
+        </div>
+        <div class="exam-grid">
+          ${EXAMS.map(ex=>{
+            const done = STORE.examsDone[ex.id];
+            const unlocked = isExamUnlocked(ex.id);
+            const status = done?'completed':(ex.status==='available' && !unlocked ? 'locked' : ex.status);
+            return `<div class="exam-card">
+              <span class="exam-status ${status}">${status.toUpperCase()}</span>
+              <h4>${ex.title}</h4>
+              <p>${ex.desc}</p>
+              <div class="exam-meta"><span>10 soal</span><span>${ex.duration} menit</span><span>≥ ${ex.passingScore}</span></div>
+              ${done?`<div class="callout ${done.passed?'tip':'warn'}" style="margin-bottom:12px;font-size:0.76rem;padding:8px 12px;">Skor: <strong>${done.score}</strong> · ${done.passed?'LULUS':'REMEDIAL'}</div>`:''}
+              ${ex.status==='available'
+                ? `<a href="#/exam/${ex.id}" class="btn ${unlocked?'btn-primary':'btn-ghost'} btn-sm btn-block">${unlocked ? (done?'Ulangi':'Mulai Ujian') : '🔒 Butuh Token'}</a>`
+                : `<button class="btn btn-ghost btn-sm btn-block" disabled style="opacity:.5;">Belum Tersedia</button>`}
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="section-head" style="margin-top:50px;"><div class="section-eyebrow">History</div><h2>Riwayat Ujian</h2><p>Data tersimpan di browser.</p></div>
+        ${renderExamHistory()}
+      </div>
+    </section>`;
+}
+function renderExamHistory(){
+  const list = STORE.history.filter(h=>h.type==='exam');
+  if(!list.length) return `<div class="empty">${SVG.emptyBox}<h3>Belum ada riwayat ujian</h3><p>Selesaikan ujian pertamamu.</p></div>`;
+  return list.map(h=>`<div class="hist-row">
+    <div class="name">${h.title}</div><div class="score">${h.score}/100</div>
+    <div class="badge ${h.passed?'pass':'fail'}">${h.passed?'PASSED':'REMEDIAL'}</div>
+    <div style="color:var(--text-3);font-size:0.73rem;">${new Date(h.date).toLocaleDateString('id-ID')}</div>
+  </div>`).join('');
+}
+
+let EXAM_TIMER = null;
+function getExamSession(id){ try{ return (JSON.parse(localStorage.getItem(EXAM_TIME_KEY))||{})[id]||null; }catch{ return null; } }
+function setExamSession(id,s){ const all=JSON.parse(localStorage.getItem(EXAM_TIME_KEY))||{}; all[id]=s; localStorage.setItem(EXAM_TIME_KEY,JSON.stringify(all)); }
+function clearExamSession(id){ const all=JSON.parse(localStorage.getItem(EXAM_TIME_KEY))||{}; delete all[id]; localStorage.setItem(EXAM_TIME_KEY,JSON.stringify(all)); }
+function fmtTime(ms){ if(ms<0) ms=0; const t=Math.floor(ms/1000); return `${String(Math.floor(t/3600)).padStart(2,'0')}:${String(Math.floor((t%3600)/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`; }
+
+function renderExamDetail(examId){
+  const exam = EXAMS.find(e=>e.id===examId);
+  if(!exam) return renderNotFound();
+
+  const unlocked = isExamUnlocked(examId);
+  if(exam.status === 'available' && !unlocked){
+    document.getElementById('app').innerHTML=`
+      <section class="quiz-wrap">
+        <div class="result-card" style="text-align:left;max-width:560px;">
+          <span class="exam-status locked">LOCKED</span>
+          <h2 style="font-size:1.25rem;font-weight:800;margin:14px 0 8px;letter-spacing:-0.02em;">${exam.title}</h2>
+          <p style="color:var(--text-2);font-size:0.88rem;margin-bottom:20px;">${exam.desc}</p>
+          <div class="callout warn"><strong>Token diperlukan.</strong> Masukkan token ujian dari pengajar buat buka ujian ini.</div>
+          <label style="display:block;font-size:0.76rem;font-weight:600;margin-bottom:6px;">Token Ujian</label>
+          <input type="text" id="examTokenInput" placeholder="HXJ-XXXXXX" autocomplete="off" spellcheck="false"
+            style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border-2);
+                   background:var(--surface-2);color:var(--text);font-family:var(--mono);
+                   font-size:0.92rem;letter-spacing:0.08em;outline:none;text-transform:uppercase;">
+          <div id="examTokenMsg" style="color:var(--danger);font-size:0.74rem;margin-top:8px;min-height:1.1em;"></div>
+          <button class="btn btn-primary btn-block" id="examTokenBtn" style="margin-top:12px;">Buka Ujian</button>
+          <a href="#/ujian" class="btn btn-ghost btn-sm btn-block" style="margin-top:10px;">← Kembali</a>
+        </div>
+      </section>`;
+    const input = document.getElementById('examTokenInput');
+    const btn = document.getElementById('examTokenBtn');
+    const msg = document.getElementById('examTokenMsg');
+    input.focus();
+    const submitToken = ()=>{
+      const val = input.value.trim().toUpperCase();
+      if(!val){ msg.textContent = 'Token tidak boleh kosong.'; return; }
+      if(val === exam.token.toUpperCase()){
+        unlockExam(examId); toast('Token valid. Ujian dibuka.'); renderExamDetail(examId);
+      } else {
+        msg.textContent = 'Token salah. Coba lagi.';
+        input.style.borderColor = 'var(--danger)';
+        input.value = '';
+        setTimeout(()=>{ input.style.borderColor = ''; }, 1200);
+      }
+    };
+    btn.addEventListener('click', submitToken);
+    input.addEventListener('keydown', e=>{ if(e.key === 'Enter') submitToken(); });
+    return;
+  }
+
+  const session = getExamSession(examId);
+  if(!session){
+    document.getElementById('app').innerHTML=`
+      <section class="quiz-wrap">
+        <div class="result-card" style="text-align:left;max-width:620px;">
+          <span class="exam-status available">${exam.status.toUpperCase()}</span>
+          <h2 style="font-size:1.3rem;font-weight:800;margin:14px 0 8px;letter-spacing:-0.02em;">${exam.title}</h2>
+          <p style="color:var(--text-2);font-size:0.88rem;margin-bottom:20px;">${exam.desc}</p>
+          <div class="result-stats" style="grid-template-columns:repeat(3,1fr);">
+            <div class="result-stat"><b>10</b><span>Soal</span></div>
+            <div class="result-stat"><b>${exam.duration}</b><span>Menit</span></div>
+            <div class="result-stat"><b>${exam.passingScore}</b><span>Passing</span></div>
+          </div>
+          <div class="callout warn"><strong>Perhatian:</strong> Setelah menekan Mulai Ujian, timer ${exam.duration} menit jalan dan gak bisa dijeda.</div>
+          <button class="btn btn-primary btn-block" onclick="startExam('${examId}')">Mulai Ujian</button>
+          <a href="#/ujian" class="btn btn-ghost btn-sm btn-block" style="margin-top:10px;">← Kembali</a>
+        </div>
+      </section>`;
+    return;
+  }
+
+  document.getElementById('app').innerHTML=`
+    <section class="quiz-wrap">
+      <div class="quiz-top">
+        <div><div class="quiz-step">${exam.title}</div><div class="quiz-title">Sedang berlangsung</div></div>
+        <div class="quiz-badge" id="examTimer">--:--:--</div>
+      </div>
+      <div class="quiz-bar"><div class="fill" style="width:100%"></div></div>
+      <div class="quiz-card">
+        <p style="color:var(--text-2);font-size:0.88rem;margin-bottom:14px;">Jawab pertanyaan berikut. Jawaban disimpan otomatis.</p>
+        <div id="examQuestion"></div>
+        <div class="quiz-foot" style="margin-top:20px;">
+          <button class="btn btn-ghost btn-sm" onclick="finishExam('${examId}')">Selesaikan Ujian</button>
+        </div>
+      </div>
+    </section>`;
+  const pool = QUESTIONS[exam.course];
+  const picked = pickN(pool,10);
+  session.questions = picked.map(q=>q.q);
+  session.answers = session.answers || new Array(picked.length).fill(null);
+  session._picked = picked;
+  setExamSession(examId,session);
+  document.getElementById('examQuestion').innerHTML = picked.map((q,i)=>`
+    <div style="margin-bottom:20px;">
+      <div class="quiz-question" style="font-size:0.9rem;">${i+1}. ${q.q} <small>[${q.ref||''}]</small></div>
+      <div class="quiz-options">
+        ${q.options.map((opt,j)=>`<button class="opt" onclick="examAnswer('${examId}',${i},${j})" data-eq="${i}-${j}">
+          <span class="k">${String.fromCharCode(65+j)}</span><span>${opt}</span></button>`).join('')}
+      </div>
+    </div>`).join('');
+  session.answers.forEach((ans,i)=>{ if(ans!==null){ const b=document.querySelector(`[data-eq="${i}-${ans}"]`); if(b) b.classList.add('selected'); } });
+  clearInterval(EXAM_TIMER);
+  const tick=()=>{
+    const s = getExamSession(examId); if(!s) return;
+    const left = s.endAt - Date.now();
+    const el = document.getElementById('examTimer'); if(!el) return;
+    el.textContent = 'TIME · ' + fmtTime(left);
+    el.classList.toggle('danger', left < 5*60*1000);
+    if(left<=0){ clearInterval(EXAM_TIMER); finishExam(examId,true); }
+  };
+  tick();
+  EXAM_TIMER = setInterval(tick,1000);
+}
+window.startExam = id=>{
+  const exam = EXAMS.find(e=>e.id===id);
+  const now = Date.now();
+  setExamSession(id,{startedAt:now,endAt:now+exam.duration*60*1000,answers:[]});
+  renderExamDetail(id);
+};
+window.examAnswer = (id,q,o)=>{
+  const s = getExamSession(id); if(!s) return;
+  s.answers[q]=o; setExamSession(id,s);
+  document.querySelectorAll(`[data-eq^="${q}-"]`).forEach(b=>b.classList.remove('selected'));
+  const btn = document.querySelector(`[data-eq="${q}-${o}"]`); if(btn) btn.classList.add('selected');
+};
+window.finishExam = (id)=>{
+  const exam = EXAMS.find(e=>e.id===id);
+  const session = getExamSession(id); if(!session) return;
+  const picked = session._picked||[];
+  let correct=0;
+  picked.forEach((q,i)=>{ if(session.answers[i]===q.answer) correct++; });
+  const total = picked.length||1;
+  const score = Math.round((correct/total)*100);
+  const passed = score>=exam.passingScore;
+  STORE.examsDone[id]={score,passed,date:new Date().toISOString()};
+  STORE.history.unshift({type:'exam',course:exam.course,title:exam.title,score,total:100,passed,date:new Date().toISOString()});
+  STORE.history = STORE.history.slice(0,50);
+  saveStore(STORE);
+  sessionStorage.setItem('last_exam_result_'+id,JSON.stringify({correct,total,score,passed,examId:id}));
+  clearExamSession(id);
+  lockExam(id);
+  clearInterval(EXAM_TIMER);
+  location.hash = `#/exam-result/${id}`;
+};
+function renderExamResult(examId){
+  const exam = EXAMS.find(e=>e.id===examId);
+  if(!exam) return renderNotFound();
+  const raw = sessionStorage.getItem('last_exam_result_'+examId);
+  let data = raw?JSON.parse(raw):null;
+  if(!data){
+    const done = STORE.examsDone[examId];
+    if(done) data = {correct:Math.round(done.score/100*10),total:10,score:done.score,passed:done.passed};
+    else return renderNotFound();
+  }
+  document.getElementById('app').innerHTML=`
+    <section class="quiz-wrap">
+      <div class="result-card">
+        <div class="result-status ${data.passed?'pass':'fail'}">${data.passed?'PASSED':'REMEDIAL REQUIRED'}</div>
+        <div class="result-score ${data.passed?'pass':'fail'}">${data.score}</div>
+        <div class="result-sub">/ 100 · ${exam.title}</div>
+        <div class="result-stats">
+          <div class="result-stat"><b style="color:var(--success)">${data.correct}</b><span>Correct</span></div>
+          <div class="result-stat"><b style="color:var(--danger)">${data.total-data.correct}</b><span>Wrong</span></div>
+        </div>
+        ${!data.passed?`<div class="callout warn" style="text-align:left;"><strong>Nilai belum capai ${exam.passingScore}.</strong> Lakukan remedial.</div>
+          <div class="result-actions" style="margin-top:14px;">
+            <a href="#/quiz/${exam.course}/remedial" class="btn btn-primary btn-sm">Mulai Remedial</a>
+            <a href="#/belajar" class="btn btn-ghost btn-sm">Kembali Belajar</a>
+          </div>`:`<div class="callout tip" style="text-align:left;"><strong>Selamat!</strong> Lu lulus ujian ${exam.title}.</div>
+          <div class="result-actions" style="margin-top:14px;">
+            <a href="#/progress" class="btn btn-primary btn-sm">Lihat Progress</a>
+            <a href="#/ujian" class="btn btn-ghost btn-sm">Ujian Lain</a>
+          </div>`}
+      </div>
+    </section>`;
+}
+
+function renderPlayground(){
+  const pg = STORE.playground;
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Playground</div>
+          <h2>Code Playground</h2>
+          <p>Tulis HTML, CSS, dan JavaScript terus jalanin langsung di browser.</p>
+        </div>
+        <div class="pg-grid">
+          <div class="pg-panel">
+            <div class="pg-tabs">
+              <button class="pg-tab active" data-pg="html">HTML</button>
+              <button class="pg-tab" data-pg="css">CSS</button>
+              <button class="pg-tab" data-pg="js">JS</button>
+            </div>
+            <textarea class="pg-editor" id="pgEditor" spellcheck="false"></textarea>
+            <div class="pg-toolbar">
+              <button class="btn btn-primary btn-sm" id="pgRun">${SVG.iconPlay} Run</button>
+              <button class="btn btn-ghost btn-sm" id="pgCopy">Copy</button>
+              <button class="btn btn-ghost btn-sm" id="pgReset">Reset</button>
+              <button class="btn btn-danger btn-sm" id="pgClear">Clear</button>
+            </div>
+          </div>
+          <div class="pg-panel">
+            <div class="pg-tabs"><button class="pg-tab active">Preview</button></div>
+            <div class="pg-preview"><iframe id="pgPreview" sandbox="allow-scripts allow-modals"></iframe></div>
+          </div>
+          <div class="pg-note"><strong>Tip:</strong> Kode HTML/CSS/JS dijalanin langsung di dalam iframe sandbox.</div>
+        </div>
+      </div>
+    </section>`;
+  let active = 'html';
+  const editor = document.getElementById('pgEditor');
+  const preview = document.getElementById('pgPreview');
+  const defaults = {
+    html: '<h1 style="color:#7c5cff">Hello HANZZY</h1>\n<p>Coba edit HTML ini.</p>',
+    css: 'body {\n  font-family: sans-serif;\n  background: #0f172a;\n  color: #fff;\n  padding: 40px;\n}',
+    js: 'console.log("Hello from HANZZY");\ndocument.body.style.background = "#0f172a";'
+  };
+  const loadTab = t=>{
+    active = t;
+    document.querySelectorAll('.pg-tab[data-pg]').forEach(b=>b.classList.toggle('active',b.dataset.pg===t));
+    editor.value = (pg[t]!==undefined&&pg[t]!=='')?pg[t]:defaults[t];
+  };
+  document.querySelectorAll('.pg-tab[data-pg]').forEach(b=>b.addEventListener('click',()=>loadTab(b.dataset.pg)));
+  loadTab('html');
+  editor.addEventListener('input',()=>{ pg[active]=editor.value; saveStore(STORE); });
+  const run = ()=>{
+    const doc = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${pg.css||''}</style></head><body>${pg.html||''}<script>${pg.js||''}<\/script></body></html>`;
+    preview.srcdoc = doc;
+  };
+  document.getElementById('pgRun').addEventListener('click',run);
+  document.getElementById('pgCopy').addEventListener('click',()=>navigator.clipboard.writeText(editor.value).then(()=>toast('Kode disalin')));
+  document.getElementById('pgReset').addEventListener('click',()=>{ editor.value=defaults[active]; pg[active]=defaults[active]; saveStore(STORE); toast('Kode direset'); });
+  document.getElementById('pgClear').addEventListener('click',()=>{ editor.value=''; pg[active]=''; saveStore(STORE); toast('Editor dibersihkan'); });
+  run();
+}
+
+function renderProgress(){
+  const courses = Object.values(COURSES);
+  const lessonsDone = courses.reduce((s,c)=>s+(STORE.lessonsDone[c.id]||[]).length,0);
+  const practiceDone = Object.keys(STORE.practice).length;
+  const examsDone = Object.keys(STORE.examsDone).length;
+  const scores = Object.values(STORE.practice).map(p=>p.lastScore).filter(s=>typeof s==='number');
+  const avg = scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Progress</div>
+          <h2>Your Learning Progress</h2>
+          <p>Data kesimpen di browser lu sendiri. Gak ada akun, gak ada server.</p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box"><b>${courses.length}</b><span>Total Courses</span></div>
+          <div class="stat-box"><b>${lessonsDone}</b><span>Lessons Done</span></div>
+          <div class="stat-box"><b>${practiceDone}</b><span>Practice Done</span></div>
+          <div class="stat-box"><b>${examsDone}</b><span>Exams Done</span></div>
+          <div class="stat-box"><b>${avg}%</b><span>Average Score</span></div>
+        </div>
+        <h3 style="font-size:1rem;font-weight:700;margin:30px 0 14px;letter-spacing:-0.01em;">Course Progress</h3>
+        ${courses.map(c=>{
+          const p = courseProgress(c.id);
+          const practice = STORE.practice[c.id];
+          return `<div class="progress-card">
+            <div class="progress-card-head">
+              <h4>${c.icon} ${c.name}</h4>
+              <span class="pct">${p.pct}%</span>
+            </div>
+            <div class="progress-bar"><div class="fill" style="width:${p.pct}%;background:${c.color};"></div></div>
+            <div class="progress-meta">
+              <span>${p.done}/${p.total} materi</span>
+              <span>Latihan: ${practice?practice.lastScore+'/100':'Belum'}</span>
+              <span>Remedial: ${STORE.remedial[c.id]?.lastScore??'Belum'}</span>
+            </div>
+          </div>`;
+        }).join('')}
+        <h3 style="font-size:1rem;font-weight:700;margin:36px 0 14px;letter-spacing:-0.01em;">Riwayat Aktivitas</h3>
+        ${STORE.history.length===0?`<div class="empty">${SVG.emptyBox}<h3>Belum ada aktivitas</h3><p>Mulai latihan atau ujian dulu.</p></div>`:
+          STORE.history.slice(0,15).map(h=>`<div class="hist-row">
+            <div class="name">${h.title}</div>
+            <div class="score">${h.score}/100</div>
+            <div class="badge ${h.passed?'pass':'fail'}">${h.passed?'PASSED':'REMEDIAL'}</div>
+            <div style="color:var(--text-3);font-size:0.73rem;">${new Date(h.date).toLocaleDateString('id-ID')}</div>
+          </div>`).join('')}
+        <div style="margin-top:30px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-danger btn-sm" onclick="resetProgress()">Reset Progress</button>
+          <a href="#/belajar" class="btn btn-primary btn-sm">Lanjut Belajar</a>
+        </div>
+      </div>
+    </section>`;
+}
+window.resetProgress = ()=>{
+  if(!confirm('Yakin mau hapus semua progress?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(EXAM_TIME_KEY);
+  STORE = loadStore();
+  toast('Progress direset');
+  render();
+};
+
+function renderContact(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Contact</div>
+          <h2>Ayo Ngobrol</h2>
+          <p>Punya project, pertanyaan, atau ide kolaborasi? Langsung kontak aja.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>${SVG.iconUser} Info Kontak</h3>
+            <a href="https://wa.me/6282228928028" target="_blank" rel="noopener" class="contact-item">
+              <div class="contact-icon">${SVG.iconWA}</div>
+              <div class="contact-text"><div class="label">WhatsApp</div><div class="value">+62 822-2892-8028</div></div>
+            </a>
+            <a href="mailto:hanzzydev@gmail.com" class="contact-item">
+              <div class="contact-icon">${SVG.iconMail}</div>
+              <div class="contact-text"><div class="label">Email</div><div class="value">hanzzydev@gmail.com</div></div>
+            </a>
+            <a href="https://hanie-alfarisy-dev.vercel.app" target="_blank" rel="noopener" class="contact-item">
+              <div class="contact-icon">${SVG.iconGlobe}</div>
+              <div class="contact-text"><div class="label">Website</div><div class="value">hanie-alfarisy-dev.vercel.app</div></div>
+            </a>
+            <div class="contact-item" onclick="navigator.clipboard.writeText('Surabaya, Indonesia');toast('Lokasi disalin')">
+              <div class="contact-icon">${SVG.iconMap}</div>
+              <div class="contact-text"><div class="label">Lokasi</div><div class="value">Surabaya, Indonesia</div></div>
+            </div>
+            <div class="contact-item" onclick="navigator.clipboard.writeText('Online 24/7');toast('Status disalin')">
+              <div class="contact-icon">${SVG.iconClock}</div>
+              <div class="contact-text"><div class="label">Status</div><div class="value">Online 24/7</div></div>
+            </div>
+            <h3 style="margin-top:20px;">${SVG.iconGlobe} Sosial Media</h3>
+            <div class="social-grid">
+              <a href="https://github.com/XF2199" target="_blank" rel="noopener" class="social-tile">${SVG.iconGithub}<span>GitHub</span></a>
+              <a href="https://instagram.com/hanzzydev" target="_blank" rel="noopener" class="social-tile">${SVG.iconInstagram}<span>Instagram</span></a>
+              <a href="https://youtube.com/@hanzzydev" target="_blank" rel="noopener" class="social-tile">${SVG.iconYoutube}<span>YouTube</span></a>
+              <a href="https://www.linkedin.com/in/hanie-alfarisy-arifin" target="_blank" rel="noopener" class="social-tile">${SVG.iconLinkedin}<span>LinkedIn</span></a>
+            </div>
+          </div>
+          <div class="contact-card">
+            <h3>${SVG.iconMap} Lokasi</h3>
+            <p style="color:var(--text-2);font-size:0.86rem;line-height:1.7;margin-bottom:12px;word-break:break-word;">
+              Berbasis di <strong style="color:var(--text)">Surabaya, Jawa Timur, Indonesia</strong>.
+              Terbuka buat kolaborasi remote atau on-site di area Surabaya dan sekitarnya.
+            </p>
+            <div class="map-embed">
+              <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=112.6%2C-7.35%2C112.85%2C-7.15&layer=mapnik&marker=-7.2575%2C112.7521" loading="lazy" title="Peta Surabaya"></iframe>
+            </div>
+            <h3 style="margin-top:20px;">${SVG.iconClock} Jam Operasional</h3>
+            <div class="callout">
+              <strong>Senin – Jumat:</strong> 15.00 – 22.00 WIB<br>
+              <strong>Sabtu – Minggu:</strong> 09.00 – 22.00 WIB<br>
+              <strong>Response time:</strong> 1–6 jam via WhatsApp
+            </div>
+            <h3 style="margin-top:20px;">${SVG.iconShield} Kenapa Kontak Saya?</h3>
+            <ul style="list-style:none;padding:0;margin:0;">
+              <li style="padding:6px 0;color:var(--text-2);font-size:0.84rem;display:flex;gap:8px;word-break:break-word;"><span style="color:var(--success);font-weight:700;flex-shrink:0;">✓</span> Konsultasi gratis untuk diskusi project</li>
+              <li style="padding:6px 0;color:var(--text-2);font-size:0.84rem;display:flex;gap:8px;word-break:break-word;"><span style="color:var(--success);font-weight:700;flex-shrink:0;">✓</span> Estimasi biaya & waktu yang transparan</li>
+              <li style="padding:6px 0;color:var(--text-2);font-size:0.84rem;display:flex;gap:8px;word-break:break-word;"><span style="color:var(--success);font-weight:700;flex-shrink:0;">✓</span> Support pasca-project 30 hari</li>
+              <li style="padding:6px 0;color:var(--text-2);font-size:0.84rem;display:flex;gap:8px;word-break:break-word;"><span style="color:var(--success);font-weight:700;flex-shrink:0;">✓</span> Revisi minor gratis selama masa support</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderPrivacy(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="legal-page">
+          <h1>Privacy Policy</h1>
+          <p class="legal-meta">Terakhir diperbarui: 12 Juli 2026</p>
+          <div class="legal-card"><strong>Ringkasan singkat:</strong> HANZZY EDUCATION <strong>tidak mengumpulkan</strong> data pribadi lu. Semua data belajar (progress, latihan, ujian) disimpan <strong>lokal di browser lu sendiri</strong> pake localStorage. Gak ada server, gak ada tracking, gak ada iklan.</div>
+          <h2>${SVG.iconShield} 1. Data yang Kami Kumpulkan</h2>
+          <p>HANZZY EDUCATION didesain dengan prinsip <strong>privacy-first</strong>. Kami tidak mengumpulkan, menyimpan, atau mengirim data pribadi apa pun ke server eksternal. Semua data berikut tersimpan <strong>hanya di browser lu</strong>:</p>
+          <ul><li>Progress belajar</li><li>Hasil latihan dan remedial</li><li>Hasil ujian</li><li>Preferensi tema</li><li>Kode Playground</li></ul>
+          <h2>${SVG.iconShield} 2. Cara Kami Menggunakan Data</h2>
+          <p>Data lokal cuma dipakai buat:</p>
+          <ul><li>Menampilkan progress belajar di dashboard</li><li>Menyimpan preferensi tema</li><li>Mengembalikan kode Playground</li></ul>
+          <p>Data ini <strong>tidak pernah</strong> dikirim ke pihak ketiga.</p>
+          <h2>${SVG.iconShield} 3. Cookie & Storage</h2>
+          <p>Kami pakai localStorage & sessionStorage. Kami <strong>tidak pakai cookie</strong> pihak ketiga atau pelacak iklan.</p>
+          <h2>${SVG.iconShield} 4. Layanan Pihak Ketiga</h2>
+          <ul><li><strong>Google Fonts</strong> — font Inter & JetBrains Mono</li><li><strong>Unsplash</strong> — gambar galeri</li><li><strong>OpenStreetMap</strong> — peta di Contact</li></ul>
+          <h2>${SVG.iconShield} 5. Hak Anda</h2>
+          <ul><li><strong>Hapus data</strong> — klik "Reset Progress" atau hapus data browser manual</li><li><strong>Ekspor data</strong> — DevTools → Application → Local Storage</li><li><strong>Opt-out</strong> — cukup gak pakai website ini</li></ul>
+          <h2>${SVG.iconShield} 6. Keamanan</h2>
+          <p>Karena data disimpan lokal, keamanannya tergantung keamanan device lu. Saran: jangan pakai browser publik buat ujian, pakai browser modern, reset progress kalau pakai komputer bersama.</p>
+          <h2>${SVG.iconShield} 7. Anak di Bawah Umur</h2>
+          <p>Platform cocok buat semua umur. Karena gak ada pengumpulan data, gak ada masalah privasi. Sarankan pendampingan orang tua buat anak di bawah 13 tahun.</p>
+          <h2>${SVG.iconShield} 8. Perubahan Kebijakan</h2>
+          <p>Kalau ada perubahan, bakal update tanggal "Terakhir diperbarui". Perubahan besar diumumkan di Home.</p>
+          <h2>${SVG.iconShield} 9. Kontak</h2>
+          <div class="legal-card"><strong>Email:</strong> hanzzydev@gmail.com<br><strong>WhatsApp:</strong> +62 822-2892-8028<br><strong>Website:</strong> <a href="https://hanie-alfarisy-dev.vercel.app" target="_blank" rel="noopener">hanie-alfarisy-dev.vercel.app</a></div>
+          <div class="callout tip" style="margin-top:20px;"><strong>Kesimpulan:</strong> Privasi lu aman. Kami gak simpen data lu di server, gak jual data, gak pasang iklan.</div>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderTerms(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="legal-page">
+          <h1>Terms of Service</h1>
+          <p class="legal-meta">Terakhir diperbarui: 12 Juli 2026</p>
+          <div class="legal-card"><strong>Ringkasan singkat:</strong> Platform belajar gratis. Gunakan dengan bijak. Jangan sebarkan token ujian. Jangan klaim karya orang lain.</div>
+          <h2>${SVG.iconShield} 1. Penerimaan Syarat</h2>
+          <p>Dengan mengakses HANZZY EDUCATION, lu setuju terikat dengan Terms ini. Kalau gak setuju, jangan pakai website ini.</p>
+          <h2>${SVG.iconShield} 2. Lisensi Penggunaan</h2>
+          <p>Kami kasih lu lisensi terbatas, non-eksklusif, gak bisa dipindahtangankan buat: belajar materi, mengerjakan latihan & ujian, dan pakai Playground.</p>
+          <h2>${SVG.iconShield} 3. Larangan</h2>
+          <ul><li>Menyebarkan token ujian tanpa izin</li><li>Pakai bot/script otomatis buat ujian</li><li>Klaim materi/kode sebagai karya sendiri</li><li>Aktivitas ilegal</li><li>Eksploitasi bug/celah keamanan</li><li>Mengganggu pengguna lain</li></ul>
+          <h2>${SVG.iconShield} 4. Token Ujian</h2>
+          <p>Token bersifat <strong>rahasia</strong>. Penyalahgunaan bisa berakibat pembatalan hasil ujian, blacklist dari ujian selanjutnya, dan tindakan disiplin.</p>
+          <h2>${SVG.iconShield} 5. Hak Kekayaan Intelektual</h2>
+          <p>Semua materi dilindungi hak cipta. Lu boleh belajar, pakai kode contoh buat project pribadi (dengan kredit), dan share link. Lu <strong>gak boleh</strong> menyalin seluruh materi buat dijual ulang.</p>
+          <h2>${SVG.iconShield} 6. Disclaimer</h2>
+          <p>Platform disediakan <strong>"as is"</strong> tanpa jaminan. Kami gak bertanggung jawab atas kehilangan data, error/bug, kerugian dari penggunaan, atau konten link eksternal.</p>
+          <h2>${SVG.iconShield} 7. Batasan Tanggung Jawab</h2>
+          <p>Sejauh diizinkan hukum, HANZZY EDUCATION dan pengembangnya gak bertanggung jawab atas kerugian langsung, tidak langsung, insidental, atau konsekuensial.</p>
+          <h2>${SVG.iconShield} 8. Perubahan Layanan</h2>
+          <p>Kami bisa mengubah, menambah, atau menghentikan fitur kapan aja tanpa pemberitahuan.</p>
+          <h2>${SVG.iconShield} 9. Pengakhiran</h2>
+          <p>Kami bisa menghentikan akses kalau melanggar Terms. Lu juga bisa berhenti pakai kapan aja — cukup tutup tab browser.</p>
+          <h2>${SVG.iconShield} 10. Hukum yang Berlaku</h2>
+          <p>Terms diatur oleh hukum <strong>Republik Indonesia</strong>. Sengketa diselesaikan secara musyawarah, kalau perlu lewat pengadilan berwenang di Surabaya.</p>
+          <h2>${SVG.iconShield} 11. Kontak</h2>
+          <div class="legal-card"><strong>Email:</strong> hanzzydev@gmail.com<br><strong>WhatsApp:</strong> +62 822-2892-8028<br><strong>Website:</strong> <a href="https://hanie-alfarisy-dev.vercel.app" target="_blank" rel="noopener">hanie-alfarisy-dev.vercel.app</a></div>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderFaq(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="legal-page">
+          <h1>Frequently Asked Questions</h1>
+          <p class="legal-meta">Pertanyaan yang sering ditanyain</p>
+          <h2>${SVG.iconBook} Umum</h2>
+          <p><strong>Q: HANZZY EDUCATION ini apa sih?</strong><br>A: Platform belajar coding gratis. Ada 5 bahasa pemrograman, materi, latihan, ujian, sama playground kode. Semua bisa diakses tanpa daftar akun.</p>
+          <p><strong>Q: Berapa biaya langganan?</strong><br>A: <strong>Gratis total.</strong> Gak ada biaya, gak ada iklan, gak ada premium.</p>
+          <p><strong>Q: Perlu daftar akun gak?</strong><br>A: Gak perlu. Progress kesimpen otomatis di browser lu.</p>
+          <h2>${SVG.iconPencil} Materi & Latihan</h2>
+          <p><strong>Q: Materinya dari mana?</strong><br>A: Diselaraskan sama 5 e-book dari ThePort (HTML, CSS, JS, C++) dan HANZZY DEV (Python).</p>
+          <p><strong>Q: Skor minimum buat lulus?</strong><br>A: 75/100. Kalau di bawah, harus remedial.</p>
+          <p><strong>Q: Bisa ulang latihan gak?</strong><br>A: Bisa, berkali-kali.</p>
+          <h2>${SVG.iconLock} Ujian & Token</h2>
+          <p><strong>Q: Kenapa ujian butuh token?</strong><br>A: Buat mencegah akses liar. Token cuma dikasih pengajar ke murid yang berhak.</p>
+          <p><strong>Q: Format token kayak gimana?</strong><br>A: Formatnya <code>HXJ-XXXXXX</code>. Contoh: <code>HXJ-HTML01</code>.</p>
+          <p><strong>Q: Token bisa dipakai berapa kali?</strong><br>A: Sekali per sesi. Setelah ujian selesai, token hangus.</p>
+          <p><strong>Q: Kalau refresh di tengah ujian, timer reset gak?</strong><br>A: Enggak. Timer tetep jalan, jawaban tetep tersimpan.</p>
+          <p><strong>Q: Kalau tutup browser, token masih aktif gak?</strong><br>A: Enggak. Harus masukin token lagi.</p>
+          <h2>${SVG.iconShield} Privasi & Data</h2>
+          <p><strong>Q: Data saya disimpan di mana?</strong><br>A: <strong>Di browser lu sendiri.</strong> Gak ada server, gak ada database.</p>
+          <p><strong>Q: Kalau ganti device, progress pindah gak?</strong><br>A: Enggak otomatis. Harus export manual via DevTools.</p>
+          <p><strong>Q: Ada tracking atau iklan?</strong><br>A: <strong>Nggak ada.</strong> Nol iklan, nol tracking.</p>
+          <h2>${SVG.iconPlay} Playground</h2>
+          <p><strong>Q: Playground bisa ngejalanin JavaScript gak?</strong><br>A: Bisa. HTML, CSS, JS jalan di iframe sandbox.</p>
+          <p><strong>Q: Kode saya kesimpen gak?</strong><br>A: Iya, otomatis di localStorage.</p>
+          <h2>${SVG.iconMail} Masalah Teknis</h2>
+          <p><strong>Q: Materi kepotong, kenapa?</strong><br>A: Coba rotate HP ke landscape atau zoom out. Kalau masih bermasalah, screenshot & kirim ke WhatsApp kami.</p>
+          <p><strong>Q: E-Book PDF-nya error?</strong><br>A: E-book tergantung file PDF yang diupload. Kalau belum tersedia, hubungi pengajar.</p>
+          <p><strong>Q: Ada bug, gimana laporin?</strong><br>A: Kirim detail bug ke WhatsApp atau email.</p>
+          <div class="legal-card"><strong>WhatsApp:</strong> <a href="https://wa.me/6282228928028" target="_blank" rel="noopener">+62 822-2892-8028</a><br><strong>Email:</strong> <a href="mailto:hanzzydev@gmail.com">hanzzydev@gmail.com</a></div>
+          <div class="callout tip" style="margin-top:24px;"><strong>Masih ada pertanyaan?</strong> Langsung kontak via <a href="https://wa.me/6282228928028" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600;">WhatsApp</a> atau cek <a href="https://hanie-alfarisy-dev.vercel.app" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600;">portofolio utama</a>.</div>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderAbout(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="about-hero">
+          <div class="about-profile">
+            <img src="https://files.catbox.moe/ae21o8.jpg" alt="Hanie Alfarisy Arifin" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Hanie+Alfarisy&background=7c5cff&color=fff&size=200'">
+            <div class="info">
+              <h3>Hanie Alfarisy Arifin</h3>
+              <div class="role">Full-Stack Developer · Surabaya</div>
+              <p class="bio">Siswa & developer otodidak yang jatuh cinta di dunia web development dan automasi. Fokus bikin website modern & bot WhatsApp custom yang bener-bener dipake orang.</p>
+            </div>
+          </div>
+          <h1>HANZZY EDUCATION</h1>
+          <p>Platform belajar coding. Materi, latihan, sama ujian <strong>udah diselarasin sama 5 e-book</strong> dari ThePort (HTML, CSS, JS, C++) dan HANZZY DEV (Python).</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-card"><div class="feature-icon">${SVG.iconBook}</div><h3>E-Book Matched</h3><p>Tiap materi & soal ada tag referensi bab e-book.</p></div>
+          <div class="about-card"><div class="feature-icon">${SVG.iconPencil}</div><h3>100 Soal</h3><p>50 soal latihan + 50 soal remedial, semua beda.</p></div>
+          <div class="about-card"><div class="feature-icon">${SVG.iconClock}</div><h3>Ujian Timer</h3><p>8 ujian dengan timer 60 menit.</p></div>
+          <div class="about-card"><div class="feature-icon">${SVG.iconChart}</div><h3>Progress Real</h3><p>Dashboard progress dari localStorage.</p></div>
+          <div class="about-card"><div class="feature-icon">${SVG.iconPlay}</div><h3>Playground</h3><p>HTML/CSS/JS live preview.</p></div>
+          <div class="about-card"><div class="feature-icon">${SVG.iconShield}</div><h3>100% Privat</h3><p>Tanpa login, tanpa tracking.</p></div>
+        </div>
+        <div class="callout" style="margin-top:32px;text-align:center;">
+          <strong>Learn. Practice. Improve.</strong> — © 2026 HANZZY DEV<br>
+          <a href="https://hanie-alfarisy-dev.vercel.app" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600;margin-top:8px;display:inline-block;">→ Lihat Portofolio Utama</a>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderNotFound(){
+  document.getElementById('app').innerHTML=`
+    <section class="section">
+      <div class="wrap">
+        <div class="empty" style="padding:100px 20px;">
+          ${SVG.emptyBox}
+          <h3>404 · Halaman tidak ditemukan</h3>
+          <p>Rute yang lu tuju gak tersedia.</p>
+          <a href="#/" class="btn btn-primary btn-sm" style="margin-top:16px;">Kembali ke Home</a>
+        </div>
+      </div>
+    </section>`;
+}
+
+const searchInput = document.getElementById('searchInput');
+const searchDropdown = document.getElementById('searchDropdown');
+const SEARCH_INDEX = (()=>{
+  const idx = [];
+  Object.keys(LESSONS).forEach(cid=>LESSONS[cid].forEach(l=>idx.push({course:cid,id:l.id,title:`${COURSES[cid].name} · ${l.title}`,href:`#/materi/${cid}/${l.id}`})));
+  return idx;
+})();
+searchInput.addEventListener('input',()=>{
+  const q = searchInput.value.trim().toLowerCase();
+  if(!q){ searchDropdown.classList.remove('show'); searchDropdown.innerHTML=''; return; }
+  const hits = SEARCH_INDEX.filter(i=>i.title.toLowerCase().includes(q)).slice(0,8);
+  searchDropdown.innerHTML = hits.length
+    ? hits.map(h=>`<div class="search-item" onclick="location.hash='${h.href}';document.getElementById('searchInput').value='';document.getElementById('searchDropdown').classList.remove('show');"><b>${h.title}</b><small>Materi · ${COURSES[h.course].name}</small></div>`).join('')
+    : `<div class="search-item" style="color:var(--text-3);">Gak ada hasil buat "${q}"</div>`;
+  searchDropdown.classList.add('show');
+});
+document.addEventListener('click',e=>{ if(!e.target.closest('.search-box')) searchDropdown.classList.remove('show'); });
+
+const drawer = document.getElementById('drawer');
+const drawerBg = document.getElementById('drawerBg');
+document.getElementById('burger').addEventListener('click',()=>{ drawer.classList.add('show'); drawerBg.classList.add('show'); });
+document.getElementById('drawerClose').addEventListener('click',()=>{ drawer.classList.remove('show'); drawerBg.classList.remove('show'); });
+drawerBg.addEventListener('click',()=>{ drawer.classList.remove('show'); drawerBg.classList.remove('show'); });
+document.querySelectorAll('.drawer-links a').forEach(l=>l.addEventListener('click',()=>{ drawer.classList.remove('show'); drawerBg.classList.remove('show'); }));
+
+(function boot(){
+  applyTheme(STORE.theme||'dark');
+  if(!location.hash) location.hash = '#/';
+  render();
+})();
+</script>
+</body>
+</html>
